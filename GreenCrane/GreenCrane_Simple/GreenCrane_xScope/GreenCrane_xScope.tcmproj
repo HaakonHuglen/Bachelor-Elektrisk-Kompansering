@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{0e27b574-e012-4aaa-82ed-9b761d65d3ca}</ProjectGuid>
+    <AssemblyName>GreenCrane_xScope</AssemblyName>
+    <Name>GreenCrane_xScope</Name>
+    <RootNamespace>GreenCrane_xScope</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="YT Scope Project.tcscopex">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="G_Inputs" Id="{e09506f6-c2bc-4b1a-9249-ce24af6204aa}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	bManual 			AT %I* : BOOL; 	// Manual mode controller
+	bStartButton		AT %I* : BOOL; 	// Start button
+	bStopButton			AT %I* : BOOL;	// Stop button
+	nRawJoystick 		AT %I* : INT;	// Joystick Y-position;
+	
+	nRawPistonPosition  AT %I* : INT;
+    nRawFlowSensor      AT %I* : INT;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

@@ -1,0 +1,139 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3191B76C-17BA-43EF-A670-C6135431D43E}|GreenCrane_Simple\\GreenCrane\\GreenCrane.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_Simple\\GreenCrane\\FBs\\FB_ManualJoystick.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{3191B76C-17BA-43EF-A670-C6135431D43E}|GreenCrane_Simple\\GreenCrane\\GreenCrane.plcproj|solutionrelative:GreenCrane_Simple\\GreenCrane\\FBs\\FB_ManualJoystick.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0E27B574-E012-4AAA-82ED-9B761D65D3CA}|GreenCrane_xScope\\GreenCrane_xScope.tcmproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_xScope\\YT Scope Project.tcscopex||{F11FCA8C-C893-4F48-9045-99EE42AF6CA8}|Editor",
+      "RelativeMoniker": "D:0:0:{0E27B574-E012-4AAA-82ED-9B761D65D3CA}|GreenCrane_xScope\\GreenCrane_xScope.tcmproj|solutionrelative:GreenCrane_xScope\\YT Scope Project.tcscopex||{F11FCA8C-C893-4F48-9045-99EE42AF6CA8}|Editor"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3191B76C-17BA-43EF-A670-C6135431D43E}|GreenCrane_Simple\\GreenCrane\\GreenCrane.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_Simple\\GreenCrane\\GVLs\\G_Inputs.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{3191B76C-17BA-43EF-A670-C6135431D43E}|GreenCrane_Simple\\GreenCrane\\GreenCrane.plcproj|solutionrelative:GreenCrane_Simple\\GreenCrane\\GVLs\\G_Inputs.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3191B76C-17BA-43EF-A670-C6135431D43E}|GreenCrane_Simple\\GreenCrane\\GreenCrane.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_Simple\\GreenCrane\\GVLs\\G_DataLog.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{3191B76C-17BA-43EF-A670-C6135431D43E}|GreenCrane_Simple\\GreenCrane\\GreenCrane.plcproj|solutionrelative:GreenCrane_Simple\\GreenCrane\\GVLs\\G_DataLog.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3191B76C-17BA-43EF-A670-C6135431D43E}|GreenCrane_Simple\\GreenCrane\\GreenCrane.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_Simple\\GreenCrane\\POUs\\MAIN.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{3191B76C-17BA-43EF-A670-C6135431D43E}|GreenCrane_Simple\\GreenCrane\\GreenCrane.plcproj|solutionrelative:GreenCrane_Simple\\GreenCrane\\POUs\\MAIN.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3191B76C-17BA-43EF-A670-C6135431D43E}|GreenCrane_Simple\\GreenCrane\\GreenCrane.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_Simple\\GreenCrane\\GVLs\\G_Output.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{3191B76C-17BA-43EF-A670-C6135431D43E}|GreenCrane_Simple\\GreenCrane\\GreenCrane.plcproj|solutionrelative:GreenCrane_Simple\\GreenCrane\\GVLs\\G_Output.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3191B76C-17BA-43EF-A670-C6135431D43E}|GreenCrane_Simple\\GreenCrane\\GreenCrane.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_Simple\\GreenCrane\\GVLs\\G_Parameters.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{3191B76C-17BA-43EF-A670-C6135431D43E}|GreenCrane_Simple\\GreenCrane\\GreenCrane.plcproj|solutionrelative:GreenCrane_Simple\\GreenCrane\\GVLs\\G_Parameters.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3191B76C-17BA-43EF-A670-C6135431D43E}|GreenCrane_Simple\\GreenCrane\\GreenCrane.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_Simple\\GreenCrane\\Visualization Manager.TcVMO||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{3191B76C-17BA-43EF-A670-C6135431D43E}|GreenCrane_Simple\\GreenCrane\\GreenCrane.plcproj|solutionrelative:GreenCrane_Simple\\GreenCrane\\Visualization Manager.TcVMO||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "YT Scope Project",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_xScope\\YT Scope Project.tcscopex",
+              "RelativeDocumentMoniker": "GreenCrane_xScope\\YT Scope Project.tcscopex",
+              "ToolTip": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_xScope\\YT Scope Project.tcscopex",
+              "RelativeToolTip": "GreenCrane_xScope\\YT Scope Project.tcscopex",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-02-19T11:28:19.513Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{94c070b9-db0b-4415-9311-bac4eef266f5}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MAIN",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_Simple\\GreenCrane\\POUs\\MAIN.TcPOU",
+              "RelativeDocumentMoniker": "GreenCrane_Simple\\GreenCrane\\POUs\\MAIN.TcPOU",
+              "ToolTip": "MAIN [GreenCrane_Simple.GreenCrane]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-02-12T08:58:27.262Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "G_DataLog",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_Simple\\GreenCrane\\GVLs\\G_DataLog.TcGVL",
+              "RelativeDocumentMoniker": "GreenCrane_Simple\\GreenCrane\\GVLs\\G_DataLog.TcGVL",
+              "ToolTip": "G_DataLog [GreenCrane_Simple.GreenCrane]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-02-13T13:37:15.178Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FB_ManualJoystick",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_Simple\\GreenCrane\\FBs\\FB_ManualJoystick.TcPOU",
+              "RelativeDocumentMoniker": "GreenCrane_Simple\\GreenCrane\\FBs\\FB_ManualJoystick.TcPOU",
+              "ToolTip": "FB_ManualJoystick [GreenCrane_Simple.GreenCrane]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-02-12T11:04:10.604Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "G_Parameters",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_Simple\\GreenCrane\\GVLs\\G_Parameters.TcGVL",
+              "RelativeDocumentMoniker": "GreenCrane_Simple\\GreenCrane\\GVLs\\G_Parameters.TcGVL",
+              "ToolTip": "G_Parameters [GreenCrane_Simple.GreenCrane]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-02-12T10:54:56.03Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "G_Output",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_Simple\\GreenCrane\\GVLs\\G_Output.TcGVL",
+              "RelativeDocumentMoniker": "GreenCrane_Simple\\GreenCrane\\GVLs\\G_Output.TcGVL",
+              "ToolTip": "G_Output [GreenCrane_Simple.GreenCrane]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-02-12T10:34:18.876Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "G_Inputs",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_Simple\\GreenCrane\\GVLs\\G_Inputs.TcGVL",
+              "RelativeDocumentMoniker": "GreenCrane_Simple\\GreenCrane\\GVLs\\G_Inputs.TcGVL",
+              "ToolTip": "G_Inputs [GreenCrane_Simple.GreenCrane]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-02-12T10:34:04.007Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Visualization Manager",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\GreenCrane_Simple\\GreenCrane_Simple\\GreenCrane\\Visualization Manager.TcVMO",
+              "RelativeDocumentMoniker": "GreenCrane_Simple\\GreenCrane\\Visualization Manager.TcVMO",
+              "ToolTip": "Visualization Manager [GreenCrane_Simple.GreenCrane]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-02-13T13:56:54.61Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

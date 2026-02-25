@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_ManualJoystick" Id="{d4367e15-13c3-4246-9f7d-d40a5a96c90f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ManualJoystick
+VAR_INPUT
+	bManual      : BOOL;
+    bStartButton : BOOL;
+    bStopButton  : BOOL;
+    nRawJoystick : INT;
+END_VAR
+
+VAR_OUTPUT
+	nValveOutput : INT;
+    bRunning     : BOOL;
+    bSystemOn    : BOOL;
+	bGreenLight  : BOOL;
+    bRedLight    : BOOL;
+END_VAR
+
+VAR
+	fJoyNorm : LREAL;
+	bInitialized : BOOL := FALSE;
+	
+	nJoystickCenter : INT := 8130;
+	nJoystickRange : INT := 6575;
+	
+	nValveMidpoint : INT := 19630;
+	nValveMax 	   : INT := 29460;
+	nValveMin      : INT := 9830; 
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(* System ON/OFF *)
+IF bStopButton THEN
+    bSystemOn := FALSE;
+ELSIF bStartButton THEN
+    bSystemOn := TRUE;
+END_IF
+
+
+(* ON/OFF Lamper *)
+IF bSystemOn THEN
+	(* Lyser Grønt *)
+    bGreenLight := TRUE;
+    bRedLight := FALSE;
+ELSE
+	(* Lyser Rødt *)
+    bGreenLight := FALSE;
+    bRedLight := TRUE;
+END_IF
+
+
+(* Hovedsperre *)
+IF NOT bSystemOn OR NOT bManual THEN
+    nValveOutput := 0;
+    bRunning := FALSE;
+    RETURN;
+END_IF
+
+
+(* Normaliser joystick *)
+fJoyNorm := -((TO_LREAL(nRawJoystick) - TO_LREAL(nJoystickCenter)) / TO_LREAL(nJoystickRange));
+
+
+(* Joystick bevegelse *)
+IF fJoyNorm > G_Parameters.fDeadUp THEN
+    (* Løft *)
+	nValveOutput := LIMIT(
+        nValveMidpoint,
+        nValveMidpoint + TO_INT((fJoyNorm - G_Parameters.fDeadUp) * TO_LREAL(nValveMax - nValveMidpoint) / (1.0 - G_Parameters.fDeadUp)),
+        nValveMax
+);
+    bRunning := TRUE;
+
+ELSIF fJoyNorm < -G_Parameters.fDeadDown THEN
+    (* Senk *)
+    nValveOutput := LIMIT(
+        nValveMin,
+        nValveMidpoint + TO_INT((fJoyNorm + G_Parameters.fDeadDown) * TO_LREAL(nValveMidpoint - nValveMin) / (1.0 - G_Parameters.fDeadDown)),
+        nValveMidpoint
+);
+    bRunning := TRUE;
+
+ELSE
+    (* Innenfor deadband *)
+    nValveOutput := nValveMidpoint;
+    bRunning := FALSE;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

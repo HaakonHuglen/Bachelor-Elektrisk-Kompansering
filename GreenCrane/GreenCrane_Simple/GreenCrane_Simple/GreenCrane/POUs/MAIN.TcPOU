@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="MAIN" Id="{57e81b5a-e489-4f1c-ba60-9ee761275d49}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	fbManualJoystick : FB_ManualJoystick;
+	
+	// LOGG AV VENTIL/SYLINDER
+	fPosMinInput 	: LREAL := 0.0;
+	fPosMaxInput 	: LREAL := 32767.0;
+	fPosMinOutput 	: LREAL := 0.0;
+	fPosMaxOutput 	: LREAL := 0.5;
+	
+	fFlowMinInput 	: LREAL := 0.0;
+	fFlowMaxInput 	: LREAL := 32767.0;
+	fFlowMinOutput 	: LREAL := 0.0;
+	fFlowMaxOutput 	: LREAL := 150.0;
+	
+	fNormalizedPos 	: LREAL;
+	fNormalizedFlow : LREAL;
+	fRawPos 		: LREAL;
+	fRawFlow 		: LREAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbManualJoystick(
+    bManual      := G_Inputs.bManual,
+    bStartButton := G_Inputs.bStartButton,
+    bStopButton  := G_Inputs.bStopButton,
+    nRawJoystick := G_Inputs.nRawJoystick
+);
+
+G_Output.nValveOutput := fbManualJoystick.nValveOutput;
+G_Output.bRunning     := fbManualJoystick.bRunning;
+G_Output.bSystemOn    := fbManualJoystick.bSystemOn;
+
+G_Output.bGreenLight  := fbManualJoystick.bGreenLight;
+G_Output.bRedLight    := fbManualJoystick.bRedLight;
+
+
+// LOGG AV VENTIL/SYLINDER
+	
+// Konverter stempelposisjon
+fRawPos := INT_TO_LREAL(G_Inputs.nRawPistonPosition);
+fNormalizedPos := (fRawPos - fPosMinInput) / (fPosMaxInput - fPosMinInput);
+G_DataLog.fPistonPosition := LIMIT(
+	fPosMinOutput, 
+	fPosMinOutput + fNormalizedPos * (fPosMaxOutput - fPosMinOutput), 
+	fPosMaxOutput
+);
+
+// Konverter flow
+fRawFlow := INT_TO_LREAL(G_Inputs.nRawFlowSensor);
+fNormalizedFlow := (fRawFlow - fFlowMinInput) / (fFlowMaxInput - fFlowMinInput);
+G_DataLog.fFlow := LIMIT(
+	fFlowMinOutput, 
+	fFlowMinOutput + fNormalizedFlow * (fFlowMaxOutput - fFlowMinOutput), 
+	fFlowMaxOutput
+);
+
+G_DataLog.nValveOutput := fbManualJoystick.nValveOutput;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

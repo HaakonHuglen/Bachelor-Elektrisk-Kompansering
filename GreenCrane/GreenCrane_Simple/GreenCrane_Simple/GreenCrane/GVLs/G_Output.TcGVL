@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="G_Output" Id="{9f902f2b-f352-47c0-9793-f132203a57ab}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	nValveOutput 			AT %Q* : INT;	// Valve output
+	bRunning				AT %Q* : BOOL;	// Running indicator
+	bSystemOn : BOOL;						// System status (ikke fysisk output)
+	
+	bGreenLight				AT %Q* : BOOL;	// Grønn lampe - System PÅ
+	bRedLight				AT %Q* : BOOL;	// Rød lampe - System AV
+END_VAR		]]></Declaration>
+  </GVL>
+</TcPlcObject>

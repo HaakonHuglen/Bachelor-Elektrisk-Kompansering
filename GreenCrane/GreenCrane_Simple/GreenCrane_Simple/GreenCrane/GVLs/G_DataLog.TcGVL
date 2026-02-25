@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="G_DataLog" Id="{3a6e07d7-f82d-4b86-b03b-396552703251}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	fPistonPosition : LREAL;
+	fFlow 			: LREAL;
+	nValveOutput    : INT;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

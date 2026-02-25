@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="G_Parameters" Id="{67ea3a53-a4ed-4497-9882-aa00ca0c984d}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	fDeadUp 		: LREAL := 0.23;
+	fDeadDown 		: LREAL := 0.215;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>
