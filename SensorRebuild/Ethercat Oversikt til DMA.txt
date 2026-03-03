@@ -1,0 +1,8 @@
+Ethercat Oversikt til DMA
+
+EL1008 - Digital Input  -> x3/2 (10) ERROR  - Tar imot feilmelding
+EL2008 - Digital Output -> X3/1 (09) ENABLE - Aktiverer DMA
+EL3068 - GND            ->      (  ) Sensordata
+EL3068 - Analog Input   -> X4/1 (13) Sensordata
+EL4004 - GND            -> X3/4 (12) Styresignal til ventil
+EL4004 - Analog Output  -> X3/3 (11) Styresignal til ventil

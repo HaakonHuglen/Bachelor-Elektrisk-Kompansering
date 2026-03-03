@@ -1,0 +1,7 @@
+HCSTOOL
+
+1.02 Common point
+Valg nummer 2 i parameter 1.02
+
+Underside kontaktflate der pakningen er, er det støpt inn pinnenummer 1,2,3 og jord
+For å komme inn i kontakt må skruen helt ut ta av pakningen og lite hakk på kontaktflaten (rektangulær) som går ned på coilen kan stikke en liten skrutrekker for å mate kabel.
