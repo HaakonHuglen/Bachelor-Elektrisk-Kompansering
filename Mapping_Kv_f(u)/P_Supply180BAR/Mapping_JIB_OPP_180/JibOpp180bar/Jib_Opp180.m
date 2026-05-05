@@ -2,230 +2,289 @@ clc;
 clear;
 close all;
 
-folderPath = 'C:\Users\hakon\OneDrive - Universitetet i Agder\Skrivebord\BACHELOR_PROSJEKT\Bachelor-Oppgave---Elektrisk-Kompansering\Mapping_Kv_f(u)\P_Supply180BAR\Mapping_JIB_OPP_180\JibOpp180bar';
+%% ===================== INNSTILLINGER =====================
+folderPathMain = 'C:\Users\hakon\OneDrive - Universitetet i Agder\Skrivebord\BACHELOR_PROSJEKT\Bachelor-Oppgave---Elektrisk-Kompansering\Mapping_Kv_f(u)\P_Supply180BAR\Mapping_JIB_OPP_180\JibOpp180bar';
 
-% ===================== SYLINDERDATA =====================
 dc   = 0.150;   % [m]
 drod = 0.100;   % [m]
 
 A_piston  = pi*dc^2/4;
 A_annulus = A_piston - pi*drod^2/4;
 
-% Jib opp: P->A
-activeSide = 'A';
+activeSide   = 'A';     % Jib opp -> P til A
+Cd           = 0.64;
+rho          = 850;
+velThreshold = 1e-5;
 
-Cd  = 0.64;
-rho = 850;      % [kg/m^3]
+%% ===================== LES MAPPE =====================
+T_main = lesMappe(folderPathMain, false, activeSide, A_piston, A_annulus, Cd, rho, velThreshold);
 
-velThreshold = 1e-5;   % [m/s]
-
-% ===================== FINN FILER =====================
-files = dir(fullfile(folderPath, '*prosent*.csv'));
-files = files(~contains({files.name}, 'results'));
-
-if isempty(files)
-    error('Fant ingen CSV-filer i valgt mappe.');
-end
-
-% ===================== PREALLOKER =====================
-nFiles = numel(files);
-
-u_percent    = nan(nFiles,1);
-uSensor_mean = nan(nFiles,1);
-uValve_mean  = nan(nFiles,1);
-
-ps_mean   = nan(nFiles,1);
-pa_mean   = nan(nFiles,1);
-pb_mean   = nan(nFiles,1);
-dp_mean   = nan(nFiles,1);
-
-x_mean    = nan(nFiles,1);
-xdot_mean = nan(nFiles,1);
-Q_mean    = nan(nFiles,1);
-Ad_mean   = nan(nFiles,1);
-
-file_names = strings(nFiles,1);
-
-% ===================== LOOP GJENNOM FILER =====================
-for k = 1:nFiles
-
-    file_names(k) = string(files(k).name);
-    filePath = fullfile(files(k).folder, files(k).name);
-
-    % Les prosent fra filnavn
-    token = regexp(files(k).name, '(-?\d+)', 'tokens', 'once');
-    if isempty(token)
-        warning('Kunne ikke lese prosent fra filnavn: %s', files(k).name);
-        continue;
-    end
-    u_percent(k) = str2double(token{1});
-
-    % Les alle linjer
-    rawLines = readlines(filePath);
-
-    t_ms   = [];
-    ps     = [];
-    pa     = [];
-    pb     = [];
-    x      = [];
-    uSense = [];
-    uValve = [];
-
-    for i = 1:numel(rawLines)
-        line = strtrim(rawLines(i));
-        if line == "" || contains(line, 'Name') || contains(line, 'File') || ...
-           contains(line, 'Start') || contains(line, 'End') || line == "EOF"
-            continue;
-        end
-
-        line = replace(line, ',', '.');
-        parts = split(line, ';');
-
-        if numel(parts) < 12
-            continue;
-        end
-
-        vals = str2double(parts(1:12));
-        if any(isnan(vals))
-            continue;
-        end
-
-        % t ; ps ; t ; pA ; t ; pB ; t ; x ; t ; sensor ; t ; valve
-        t_ms(end+1,1)   = vals(1);
-        ps(end+1,1)     = vals(2);
-        pa(end+1,1)     = vals(4);
-        pb(end+1,1)     = vals(6);
-        x(end+1,1)      = vals(8);
-        uSense(end+1,1) = vals(10);
-        uValve(end+1,1) = vals(12);
-    end
-
-    if numel(t_ms) < 5
-        warning('For få datapunkter i %s', files(k).name);
-        continue;
-    end
-
-    % ---- BEREGNINGER ----
-    t = t_ms / 1000;
-
-    win = min(15, numel(x));
-    x_filt = smoothdata(x, 'movmean', win);
-    xdot = gradient(x_filt, t);
-
-    uSensor_mean(k) = mean(uSense, 'omitnan');
-    uValve_mean(k)  = mean(uValve, 'omitnan');
-
-    ps_mean(k) = mean(ps, 'omitnan');
-    pa_mean(k) = mean(pa, 'omitnan');
-    pb_mean(k) = mean(pb, 'omitnan');
-
-    % Jib opp, P->A: trykkfall over aktiv orifice
-    dp_mean(k) = mean(ps - pa, 'omitnan');
-
-    x_mean(k)    = mean(x, 'omitnan');
-    xdot_mean(k) = median(xdot, 'omitnan');
-
-    % Flow og effektivt areal
-    switch upper(activeSide)
-        case 'A'
-            Q = A_piston * abs(xdot_mean(k));
-        case 'B'
-            Q = A_annulus * abs(xdot_mean(k));
-        otherwise
-            error('activeSide må være ''A'' eller ''B''.');
-    end
-
-    if abs(xdot_mean(k)) < velThreshold || dp_mean(k) <= 0
-        Q_mean(k)  = 0;
-        Ad_mean(k) = 0;
-    else
-        dp_Pa = dp_mean(k) * 1e5;
-        Q_mean(k)  = Q;
-        Ad_mean(k) = abs(Q) / (Cd * sqrt(2 * dp_Pa / rho));
-    end
-end
-
-% ===================== SORTER ETTER u =====================
-[u_percent, idx] = sort(u_percent);
-file_names    = file_names(idx);
-uSensor_mean  = uSensor_mean(idx);
-uValve_mean   = uValve_mean(idx);
-ps_mean       = ps_mean(idx);
-pa_mean       = pa_mean(idx);
-pb_mean       = pb_mean(idx);
-dp_mean       = dp_mean(idx);
-x_mean        = x_mean(idx);
-xdot_mean     = xdot_mean(idx);
-Q_mean        = Q_mean(idx);
-Ad_mean       = Ad_mean(idx);
-
-% ===================== RESULTATTABELL =====================
-results = table( ...
-    file_names, u_percent, uSensor_mean, uValve_mean, ...
-    ps_mean, pa_mean, pb_mean, dp_mean, ...
-    x_mean, xdot_mean, Q_mean, Ad_mean, ...
-    'VariableNames', { ...
-    'file_name','u_percent','uSensor_V','uValve_V', ...
-    'ps_bar','pa_bar','pb_bar','dp_bar', ...
-    'x_m','xdot_mps','Q_m3ps','Ad_m2'} );
+%% ===================== SORTER =====================
+results = sortrows(T_main, 'u_percent');
+results = results(~isnan(results.u_percent), :);
 
 disp(results);
-writetable(results, fullfile(folderPath, 'results_jib_up_PtoA.csv'));
+writetable(results, fullfile(folderPathMain, 'results_combined_jib_up.csv'));
 
-% ===================== FIGUR 1: U_målt vs U_ref =====================
-figure;
-plot(u_percent, uValve_mean, '-o', 'LineWidth', 1.8, 'MarkerSize', 7);
-hold on;
-plot(u_percent, uSensor_mean, '-s', 'LineWidth', 1.8, 'MarkerSize', 7);
-grid on;
-xlabel('u [%]');
-ylabel('U [V]');
-legend('U_{ref} (fValve1\_V)', 'U_{målt} (fSensor1\_V)', 'Location', 'best');
-title('Jib Opp – Referansesignal vs målt spoleposisjon');
+%% ===================== HENT VARIABLER =====================
+u      = results.u_percent;
+ps     = results.ps_bar;
+pa     = results.pa_bar;
+pb     = results.pb_bar;
+Q      = results.Q_m3ps;
+Ad     = results.Ad_m2;
+Kv     = results.Kv_Lmin_sqrtbar;
+uRef   = results.uV_ref;
+uMaalt = results.uV_sensor;
 
-% ===================== FIGUR 2: Trykk vs u =====================
+%% ===================== FIGUR 1: U_ref vs U_målt =====================
 figure;
-plot(u_percent, ps_mean, '-o', 'LineWidth', 1.5);
+plot(u, uRef, '-o', 'LineWidth', 1.8, 'MarkerSize', 7);
 hold on;
-plot(u_percent, pa_mean, '-o', 'LineWidth', 1.5);
-plot(u_percent, pb_mean, '-o', 'LineWidth', 1.5);
+plot(u, uMaalt, '-s', 'LineWidth', 1.8, 'MarkerSize', 7);
 grid on;
-xlabel('u [%]');
-ylabel('Trykk [bar]');
+xlabel('u [%]'); ylabel('U [V]');
+legend('U_{ref}', 'U_{målt}', 'Location', 'best');
+title('Referansesignal vs målt spoleposisjon - Jib opp');
+
+%% ===================== FIGUR 2: TRYKK =====================
+figure;
+plot(u, ps, '-o', u, pa, '-o', u, pb, '-o', 'LineWidth', 1.5);
+grid on;
+xlabel('u [%]'); ylabel('Trykk [bar]');
 legend('p_{supply}', 'p_A', 'p_B', 'Location', 'best');
-title('Jib Opp – Middeltrykksverdier vs u');
+title('Middeltrykksverdier vs u - Jib opp');
 
-% ===================== FIGUR 3: Flow vs u =====================
+%% ===================== FIGUR 3: FLOW =====================
 figure;
-plot(u_percent, Q_mean * 60000, '-o', 'LineWidth', 1.5);
+plot(u, Q * 60000, '-o', 'LineWidth', 1.5);
 grid on;
-xlabel('u [%]');
-ylabel('Q [L/min]');
-title('Jib Opp – Estimert flow vs u');
+xlabel('u [%]'); ylabel('Q [L/min]');
+title('Estimert flow vs u - Jib opp');
 
-% ===================== FIGUR 4: Ad vs u =====================
-figure;
-valid = ~isnan(u_percent) & ~isnan(Ad_mean) & Ad_mean > 0;
-u_fit  = u_percent(valid);
-Ad_fit = Ad_mean(valid);
+%% ===================== FIGUR 4: Ad vs u =====================
+plotMedFit(u, Ad, 'A_d [m^2]', 'Effektivt orifice-areal vs u - Jib opp', 'A_d', 'opp');
 
-plot(u_percent, Ad_mean, 'o', 'MarkerSize', 7, 'LineWidth', 1.5);
-hold on;
+%% ===================== FIGUR 5: Kv vs u =====================
+plotMedFit(u, Kv, 'K_v [L/(min \cdot \surdbar)]', 'K_v vs u - Jib opp', 'K_v', 'opp');
 
-polyDegree = 3;
-if numel(u_fit) >= polyDegree + 1
-    pAd = polyfit(u_fit, Ad_fit, polyDegree);
-    u_dense  = linspace(min(u_fit), max(u_fit), 300);
-    Ad_dense = polyval(pAd, u_dense);
-    plot(u_dense, Ad_dense, '-', 'LineWidth', 1.8);
-    legend('Målepunkter', sprintf('Polynomfit grad %d', polyDegree), 'Location', 'best');
-    disp('Polyfit-koeffisienter for A_d(u):');
-    disp(pAd);
-else
-    legend('Målepunkter', 'Location', 'best');
+%% ===================== PLOT MED FIT =====================
+function plotMedFit(u, y, ylbl, ttl, varName, retning)
+
+    valid    = ~isnan(u) & ~isnan(y) & y > 0;
+    deadband = ~isnan(u) & ~isnan(y) & y == 0;
+
+    figure; hold on;
+
+    if any(valid)
+        plot(u(valid), y(valid), 'o', 'MarkerSize', 7, 'LineWidth', 1.5);
+    end
+    if any(deadband)
+        plot(u(deadband), zeros(sum(deadband),1), 'rx', 'MarkerSize', 10, 'LineWidth', 2);
+    end
+
+    if strcmpi(retning, 'ned')
+        fitMask = valid & u <= -17.0;
+    else
+        fitMask = valid & u >= 17.0;
+    end
+
+    if sum(fitMask) >= 4,      polyDeg = 3;
+    elseif sum(fitMask) >= 3,  polyDeg = 2;
+    elseif sum(fitMask) >= 2,  polyDeg = 1;
+    else,                      polyDeg = NaN;
+    end
+
+    if ~isnan(polyDeg)
+        p       = polyfit(u(fitMask), y(fitMask), polyDeg);
+        u_dense = linspace(min(u(fitMask)), max(u(fitMask)), 300);
+        y_fit   = polyval(p, u_dense);
+        y_fit(y_fit < 0) = NaN;
+        plot(u_dense, y_fit, '-', 'LineWidth', 1.8);
+    end
+
+    if any(deadband)
+        if strcmpi(retning, 'ned')
+            u_db = min(u(deadband));
+        else
+            u_db = max(u(deadband));
+        end
+        xline(u_db, '--k', 'LineWidth', 1.2);
+        if any(valid)
+            text(u_db + 0.2, max(y(valid))*0.5, 'Dødbånd', 'FontSize', 10);
+        end
+    end
+
+    grid on; xlabel('u [%]'); ylabel(ylbl); title(ttl);
+
+    if ~isnan(polyDeg)
+        legend('Målepunkter', sprintf('Dødbånd (%s = 0)', varName), ...
+               sprintf('Polynomfit grad %d', polyDeg), 'Location', 'best');
+    else
+        legend('Målepunkter', sprintf('Dødbånd (%s = 0)', varName), 'Location', 'best');
+    end
 end
 
-grid on;
-xlabel('u [%]');
-ylabel('A_d [m^2]');
-title('Jib Opp – Effektivt orifice-areal vs u');
+%% ===================== LES MAPPE =====================
+function T = lesMappe(folderPath, isDeadbandFolder, activeSide, A_piston, A_annulus, Cd, rho, velThreshold)
+
+    if ~isfolder(folderPath)
+        warning('Mappen finnes ikke: %s', folderPath);
+        T = tomTabell(); return;
+    end
+
+    files = dir(fullfile(folderPath, '**', '*.csv'));
+    files = files(~contains({files.name}, 'results', 'IgnoreCase', true));
+
+    if isempty(files)
+        warning('Ingen CSV-filer funnet i: %s', folderPath);
+        T = tomTabell(); return;
+    end
+
+    nFiles = numel(files);
+    file_names     = strings(nFiles,1);
+    u_percent      = nan(nFiles,1);
+    uV_ref_mean    = nan(nFiles,1);
+    uV_sensor_mean = nan(nFiles,1);
+    ps_mean        = nan(nFiles,1);
+    pa_mean        = nan(nFiles,1);
+    pb_mean        = nan(nFiles,1);
+    dp_mean        = nan(nFiles,1);
+    x_mean         = nan(nFiles,1);
+    xdot_mean      = nan(nFiles,1);
+    Q_mean         = nan(nFiles,1);
+    Ad_mean        = nan(nFiles,1);
+    Kv_mean        = nan(nFiles,1);
+
+    for k = 1:nFiles
+
+        file_names(k) = string(files(k).name);
+        filePath = fullfile(files(k).folder, files(k).name);
+        rawLines = readlines(filePath);
+
+        u_percent(k) = hentProsentFraFilnavn(files(k).name);
+        if isnan(u_percent(k))
+            warning('Kunne ikke lese prosent fra filnavn: %s', files(k).name);
+            continue;
+        end
+
+        t_ms=[]; ps=[]; pa=[]; pb=[]; x=[]; uRef=[]; uSen=[];
+
+        for i = 1:numel(rawLines)
+            line = strtrim(rawLines(i));
+            if line == "" || line == "EOF" || ...
+               contains(line, 'Name') || contains(line, 'File') || ...
+               contains(line, 'Start') || contains(line, 'End')
+                continue;
+            end
+            line  = replace(line, ',', '.');
+            parts = split(line, ';');
+            vals  = str2double(parts);
+
+            if numel(vals) < 10 || any(isnan(vals(1:min(10,numel(vals)))))
+                continue;
+            end
+
+            t_ms(end+1,1) = vals(1);
+            ps(end+1,1)   = vals(2);
+
+            if numel(vals) >= 12
+                pa(end+1,1)   = vals(4);
+                pb(end+1,1)   = vals(6);
+                uRef(end+1,1) = vals(10);
+                uSen(end+1,1) = vals(12);
+            else
+                pb(end+1,1)   = vals(4);
+                pa(end+1,1)   = vals(6);
+                uRef(end+1,1) = NaN;
+                uSen(end+1,1) = vals(10);
+            end
+
+            if isDeadbandFolder
+                x(end+1,1) = vals(8) * 1e-3;
+            else
+                x(end+1,1) = vals(8);
+            end
+        end
+
+        if numel(t_ms) < 5
+            warning('For få datapunkter i %s', files(k).name);
+            continue;
+        end
+
+        if all(isnan(uRef))
+            uRef(:) = 5 + 5*(u_percent(k)/100);
+        end
+
+        t = t_ms / 1000;
+        p_x = polyfit(t, x, 1);
+        xdot_mean(k) = p_x(1);
+
+        uV_ref_mean(k)    = mean(uRef, 'omitnan');
+        uV_sensor_mean(k) = mean(uSen, 'omitnan');
+        ps_mean(k) = mean(ps, 'omitnan');
+        pa_mean(k) = mean(pa, 'omitnan');
+        pb_mean(k) = mean(pb, 'omitnan');
+        x_mean(k)  = mean(x,  'omitnan');
+
+        switch upper(activeSide)
+            case 'A'
+                dp_mean(k) = mean(ps - pa, 'omitnan');
+                Q = A_piston  * abs(xdot_mean(k));
+            case 'B'
+                dp_mean(k) = mean(ps - pb, 'omitnan');
+                Q = A_annulus * abs(xdot_mean(k));
+            otherwise
+                error('activeSide må være ''A'' eller ''B''.');
+        end
+
+        if abs(xdot_mean(k)) < velThreshold || dp_mean(k) <= 0
+            Q_mean(k)  = 0;
+            Ad_mean(k) = 0;
+            Kv_mean(k) = 0;
+        else
+            dp_Pa = dp_mean(k) * 1e5;
+            Q_mean(k)  = Q;
+            Ad_mean(k) = Q / (Cd * sqrt(2*dp_Pa/rho));
+            Kv_mean(k) = (Q / sqrt(dp_Pa)) * 60000 * sqrt(1e5);
+        end
+    end
+
+    uV_error = uV_sensor_mean - uV_ref_mean;
+
+    T = table(file_names, u_percent, uV_ref_mean, uV_sensor_mean, uV_error, ...
+        ps_mean, pa_mean, pb_mean, dp_mean, ...
+        x_mean, xdot_mean, Q_mean, Ad_mean, Kv_mean, ...
+        'VariableNames', {'file_name','u_percent','uV_ref','uV_sensor','uV_error', ...
+        'ps_bar','pa_bar','pb_bar','dp_bar', ...
+        'x_m','xdot_mps','Q_m3ps','Ad_m2','Kv_Lmin_sqrtbar'});
+end
+
+%% ===================== HENT PROSENT FRA FILNAVN =====================
+function u = hentProsentFraFilnavn(fileName)
+    u = NaN;
+    name = lower(string(fileName));
+    name = replace(name, ',', '.');
+    token = regexp(name, '(-?\d+(?:[.-]\d+)?)\s*prosent', 'tokens', 'once');
+    if isempty(token)
+        token = regexp(name, '(-?\d+(?:[.-]\d+)?)', 'tokens', 'once');
+    end
+    if isempty(token), return; end
+    txt = string(token{1});
+    if startsWith(txt, "-")
+        txt = "-" + replace(extractAfter(txt, 1), "-", ".");
+    else
+        txt = replace(txt, "-", ".");
+    end
+    u = str2double(txt);
+end
+
+%% ===================== TOM TABELL =====================
+function T = tomTabell()
+    T = table(strings(0,1), zeros(0,1), zeros(0,1), zeros(0,1), zeros(0,1), ...
+        zeros(0,1), zeros(0,1), zeros(0,1), zeros(0,1), ...
+        zeros(0,1), zeros(0,1), zeros(0,1), zeros(0,1), zeros(0,1), ...
+        'VariableNames', {'file_name','u_percent','uV_ref','uV_sensor','uV_error', ...
+        'ps_bar','pa_bar','pb_bar','dp_bar', ...
+        'x_m','xdot_mps','Q_m3ps','Ad_m2','Kv_Lmin_sqrtbar'});
+end
