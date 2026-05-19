@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_SensorScaling" Id="{677c5419-df4b-4d54-ad51-7d4488860700}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SensorScaling
+VAR_INPUT
+	nRawInput   : INT;
+END_VAR
+VAR_OUTPUT
+	fOutput_V   : LREAL;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fOutput_V := INT_TO_LREAL(nRawInput) / 32767.0 * 10.0;
+fOutput_V := LIMIT(0.0, fOutput_V, 10.0);
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

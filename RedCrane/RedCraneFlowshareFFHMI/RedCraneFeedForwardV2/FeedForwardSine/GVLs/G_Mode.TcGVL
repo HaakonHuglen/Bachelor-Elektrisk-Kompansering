@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="G_Mode" Id="{a008139a-5744-4cb4-ade6-f6f4888d8f04}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+    // ── Sylinderaktivering ──────────────────────────
+    bJibActive       : BOOL := TRUE;   // Jib aktiv (kan kombineres med Main)
+    bMainActive      : BOOL := FALSE;  // Main aktiv (kan kombineres med Jib)
+
+    // ── Kjøretilstand ─────────────────────────────────────────────────
+    eTrajectory      : E_Trajectory := E_Trajectory.Sine;
+    bRunning         : BOOL;
+
+    // ── Regulatorflagg ────────────────────────────────────────────────
+    bEnableFF        : BOOL := TRUE;
+    bEnablePID       : BOOL := FALSE;
+	
+	bFlowShare		 : BOOL := FALSE;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

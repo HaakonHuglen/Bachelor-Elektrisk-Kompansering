@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="GVL" Id="{d8de1da3-164a-4c52-9989-68c201799e9a}">
+    <Declaration><![CDATA[VAR_GLOBAL
+    // ===== System start/stop =====
+    systemRun     : BOOL := FALSE;
+    bLampStart    : BOOL;
+    systemRunTime : REAL := 0.0;
+
+    // ===== Sylindervalg =====
+    // bBtnManual = "Main", bBtnAutomatic = "Jib"
+    bBtnManual    : BOOL;        // Main-knapp
+    bBtnAutomatic : BOOL;        // Jib-knapp
+    bLampBlue     : BOOL;        // Main-lampe
+    bLampYellow   : BOOL;        // Jib-lampe
+
+    // ===== Home =====
+    bHomeCmd        : BOOL;
+    bHomeActiveLamp : BOOL;
+
+    // ===== Run =====
+    bRun     : BOOL;
+    bRunLamp : BOOL;
+
+    // ===== FF/PID toggles =====
+    // bFeedForward = "FF toggle", bValve = "PID toggle"
+    bFeedForward : BOOL;
+    bValve       : BOOL;
+    bFFLamp      : BOOL;
+    bValveLamp   : BOOL;
+
+    // ===== Aktiv posisjon =====
+    rMeterValue  : REAL;          // = aktiv sylinders posisjon i mm
+
+    // ===== Trykk =====
+    fMain_Pa_bar     : REAL;
+    fMain_Pb_bar     : REAL;
+    fMain_Pa_Cyl_bar : REAL;
+    fMain_Pb_Cyl_bar : REAL;
+    fJib_Pa_bar      : REAL;
+    fJib_Pb_bar      : REAL;
+    fJib_Pa_Cyl_bar  : REAL;
+    fJib_Pb_Cyl_bar  : REAL;
+    fPs_bar          : REAL;
+
+    // ===== Begge sylindre samtidig =====
+    fMain_Position_mm : REAL;
+    fJib_Position_mm  : REAL;
+
+    // ===== PID-tuning =====
+    fSliderKp : INT := 100;
+	fSliderKi : INT := 0;
+	fSliderKd : INT := 0;
+
+    // ===== Sinus live-data =====
+    fXRef_mm     : REAL;
+    fXReal_mm    : REAL;
+    fError_mm    : REAL;
+    fU_FF        : REAL;
+    fU_PID       : REAL;
+    fU_total     : REAL;
+    fFF_share_pc : REAL;
+    bSineActive  : BOOL;
+	
+	// ===== RAMP =====
+	bBtnSine  : BOOL;
+	bBtnRamp  : BOOL;
+	bLampSine : BOOL;
+	bLampRamp : BOOL;
+	
+	// MICHAEL MOD
+	sImage : STRING := 'ImagePool.Michael';
+	bState : BOOL := FALSE;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

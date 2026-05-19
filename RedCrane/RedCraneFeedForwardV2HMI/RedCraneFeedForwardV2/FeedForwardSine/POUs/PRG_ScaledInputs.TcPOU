@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_ScaledInputs" Id="{5a2279f1-c959-4973-8331-296a68546b40}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_ScaledInputs
+VAR
+    fSpool1_V : LREAL;
+    fSpool2_V : LREAL;
+    fJibV     : LREAL;
+    fMainV    : LREAL;
+    fTempV    : LREAL;
+    fJib_X    : LREAL;
+    fMain_X   : LREAL;
+    fJib_Pa, fJib_Pb, fMain_Pa, fMain_Pb, fPs : LREAL;
+	fStrokeTwincat_mm   : LREAL;
+	fStrokeCorrected_mm : LREAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// ===== Spool position feedback (DMA, 0-10V where 5V = center) =====
+fSpool1_V := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawSpool1) / 32767.0 * 10.0, 10.0);
+G_Signals.fJib_Spool := LIMIT(-1.0, (fSpool1_V - 5.0) / 5.0, 1.0);
+
+fSpool2_V := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawSpool2) / 32767.0 * 10.0, 10.0);
+G_Signals.fMain_Spool := LIMIT(-1.0, (fSpool2_V - 5.0) / 5.0, 1.0);
+
+// ===== Cylinder length sensors =====
+fJibV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawCylinder1) / 32767.0 * 10.0, 10.0);
+fJib_X := (fJibV - G_Parameter.fJib_Vmin) / (G_Parameter.fJib_Vmax - G_Parameter.fJib_Vmin) * G_Parameter.fJib_Stroke;
+fJib_X := LIMIT(0.0, fJib_X, G_Parameter.fJib_Stroke);
+
+fMainV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawCylinder2) / 32767.0 * 10.0, 10.0);
+fMain_X := (fMainV - G_Parameter.fMain_Vmin) / (G_Parameter.fMain_Vmax - G_Parameter.fMain_Vmin) * G_Parameter.fMain_Stroke;
+fMain_X := LIMIT(0.0, fMain_X, G_Parameter.fMain_Stroke);
+
+// ===== Pressures =====
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres1A) / 32767.0 * 10.0, 10.0);
+fJib_Pa := (fTempV / 10.0) * G_Parameter.fPresMaxBar;
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres1B) / 32767.0 * 10.0, 10.0);
+fJib_Pb := (fTempV / 10.0) * G_Parameter.fPresMaxBar;
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres2A) / 32767.0 * 10.0, 10.0);
+fMain_Pa := (fTempV / 10.0) * G_Parameter.fPresMaxBar;
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres2B) / 32767.0 * 10.0, 10.0);
+fMain_Pb := (fTempV / 10.0) * G_Parameter.fPresMaxBar;
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPresSupply) / 32767.0 * 10.0, 10.0);
+fPs := (fTempV / 10.0) * G_Parameter.fPresMaxBar;
+
+G_Signals.fPs := fPs;
+
+// ===== Route active cylinder =====
+IF G_Mode.eActiveCyl = E_Cylinder.Jib THEN
+    G_Signals.fPa := fJib_Pa;
+    G_Signals.fPb := fJib_Pb;
+    G_Signals.fPistonPosition := fJib_X;
+
+// ----- CALIBRATION JIB STROKE -----
+fStrokeTwincat_mm := G_Signals.fPistonPosition * 1000.0;
+
+fStrokeCorrected_mm :=
+      -2.6766141745E-05 * EXPT(fStrokeTwincat_mm, 2)
+    +  9.9764623655E-01 * fStrokeTwincat_mm
+    +  1.8743836626E+01; 
+
+G_Signals.fPistonPosition :=
+    LIMIT(0.0, fStrokeCorrected_mm / 1000.0, G_Parameter.fJib_Stroke);
+// -----------------------------------
+    // ----------------------------------- 
+
+    G_Signals.fSpool_Active := G_Signals.fJib_Spool;
+
+    G_Parameter.fAreaA := G_Parameter.fJib_AreaA;
+    G_Parameter.fAreaB := G_Parameter.fJib_AreaB;
+
+    G_Parameter.fPoly_Up_a5 := G_Parameter.fJib_Up_a5;
+    G_Parameter.fPoly_Up_a4 := G_Parameter.fJib_Up_a4;
+    G_Parameter.fPoly_Up_a3 := G_Parameter.fJib_Up_a3;
+    G_Parameter.fPoly_Up_a2 := G_Parameter.fJib_Up_a2;
+    G_Parameter.fPoly_Up_a1 := G_Parameter.fJib_Up_a1;
+    G_Parameter.fPoly_Up_a0 := G_Parameter.fJib_Up_a0;
+    G_Parameter.fPoly_Down_a5 := G_Parameter.fJib_Down_a5;
+    G_Parameter.fPoly_Down_a4 := G_Parameter.fJib_Down_a4;
+    G_Parameter.fPoly_Down_a3 := G_Parameter.fJib_Down_a3;
+    G_Parameter.fPoly_Down_a2 := G_Parameter.fJib_Down_a2;
+    G_Parameter.fPoly_Down_a1 := G_Parameter.fJib_Down_a1;
+    G_Parameter.fPoly_Down_a0 := G_Parameter.fJib_Down_a0;
+ELSE
+    G_Signals.fPa := fMain_Pa;
+    G_Signals.fPb := fMain_Pb;
+    G_Signals.fPistonPosition := fMain_X;
+    G_Signals.fSpool_Active := G_Signals.fMain_Spool;
+
+    G_Parameter.fAreaA := G_Parameter.fMain_AreaA;
+    G_Parameter.fAreaB := G_Parameter.fMain_AreaB;
+
+    G_Parameter.fPoly_Up_a5 := G_Parameter.fMain_Up_a5;
+    G_Parameter.fPoly_Up_a4 := G_Parameter.fMain_Up_a4;
+    G_Parameter.fPoly_Up_a3 := G_Parameter.fMain_Up_a3;
+    G_Parameter.fPoly_Up_a2 := G_Parameter.fMain_Up_a2;
+    G_Parameter.fPoly_Up_a1 := G_Parameter.fMain_Up_a1;
+    G_Parameter.fPoly_Up_a0 := G_Parameter.fMain_Up_a0;
+    G_Parameter.fPoly_Down_a5 := G_Parameter.fMain_Down_a5;
+    G_Parameter.fPoly_Down_a4 := G_Parameter.fMain_Down_a4;
+    G_Parameter.fPoly_Down_a3 := G_Parameter.fMain_Down_a3;
+    G_Parameter.fPoly_Down_a2 := G_Parameter.fMain_Down_a2;
+    G_Parameter.fPoly_Down_a1 := G_Parameter.fMain_Down_a1;
+    G_Parameter.fPoly_Down_a0 := G_Parameter.fMain_Down_a0;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

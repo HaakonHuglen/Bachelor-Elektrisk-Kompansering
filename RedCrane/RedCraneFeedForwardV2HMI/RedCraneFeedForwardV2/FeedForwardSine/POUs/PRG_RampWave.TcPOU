@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_RampWave" Id="{015f1993-02c3-4328-b6cb-44bdf4b269dc}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_RampWave
+VAR
+    fTime           : LREAL;
+    fU              : LREAL;            // normalisert tid 0..1
+    fX1, fX2        : LREAL;            // start/slutt for aktiv rampe
+    fPhase          : INT := 0;         // 0=ramp opp, 1=hold topp, 2=ramp ned, 3=hold bunn
+    fbStartDelay    : TON;
+    fbKvFF          : FB_KvFeedForward;
+    fbPosFB         : FB_PositionFeedback;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbStartDelay(IN := G_IO.bRampButton AND G_Mode.bRunning, PT := T#2S);
+
+IF fbStartDelay.Q AND G_Mode.eTrajectory = E_Trajectory.Ramp THEN
+    fTime := fTime + G_Parameter.fCycleTime;
+
+    // ---------- Faseskift basert på fTime ----------
+    CASE fPhase OF
+        0:  // Ramp opp X1 -> X2
+            fX1 := G_Parameter.fRamp_X1;
+            fX2 := G_Parameter.fRamp_X2;
+            IF fTime >= G_Parameter.fRamp_Duration THEN
+                fTime := 0.0;
+                fPhase := 1;
+            END_IF
+
+        1:  // Hold topp
+            fX1 := G_Parameter.fRamp_X2;
+            fX2 := G_Parameter.fRamp_X2;
+            IF fTime >= G_Parameter.fRamp_HoldTime THEN
+                fTime := 0.0;
+                fPhase := 2;
+            END_IF
+
+        2:  // Ramp ned X2 -> X1
+            fX1 := G_Parameter.fRamp_X2;
+            fX2 := G_Parameter.fRamp_X1;
+            IF fTime >= G_Parameter.fRamp_Duration THEN
+                fTime := 0.0;
+                fPhase := 3;
+            END_IF
+
+        3:  // Hold bunn
+            fX1 := G_Parameter.fRamp_X1;
+            fX2 := G_Parameter.fRamp_X1;
+            IF fTime >= G_Parameter.fRamp_HoldTime THEN
+                fTime := 0.0;
+                fPhase := 0;
+            END_IF
+    END_CASE
+
+    // ---------- Smoothstep ----------
+    IF fPhase = 0 OR fPhase = 2 THEN
+        // Aktiv rampe-fase
+        fU := fTime / G_Parameter.fRamp_Duration;
+        IF fU > 1.0 THEN
+            fU := 1.0;
+        END_IF
+
+        // x_ref = x1 + (x2 - x1) * (3u^2 - 2u^3)
+        G_Signals.fXRef := fX1 + (fX2 - fX1) * (3.0 * fU * fU - 2.0 * fU * fU * fU);
+
+        // dx/dt = (x2 - x1) * (6u - 6u^2) / T
+        G_Signals.fXDotRef := (fX2 - fX1) * (6.0 * fU - 6.0 * fU * fU)
+                              / G_Parameter.fRamp_Duration;
+    ELSE
+        // Holde-fase: posisjon konstant, hastighet = 0
+        G_Signals.fXRef    := fX1;
+        G_Signals.fXDotRef := 0.0;
+    END_IF
+
+    // ---------- Samme FF + PID som PRG_SineWave ----------
+    fbKvFF(
+        bEnable      := G_Mode.bEnableFF,
+        fXDotRef     := G_Signals.fXDotRef,
+        fPa          := G_Signals.fPa,
+        fPb          := G_Signals.fPb,
+        fPs          := G_Signals.fPs,
+        fA           := G_Parameter.fAreaA,
+        fAr          := G_Parameter.fAreaB,
+        fPoly_Up_a5  := G_Parameter.fPoly_Up_a5,
+        fPoly_Up_a4  := G_Parameter.fPoly_Up_a4,
+        fPoly_Up_a3  := G_Parameter.fPoly_Up_a3,
+        fPoly_Up_a2  := G_Parameter.fPoly_Up_a2,
+        fPoly_Up_a1  := G_Parameter.fPoly_Up_a1,
+        fPoly_Up_a0  := G_Parameter.fPoly_Up_a0,
+        fPoly_Down_a5 := G_Parameter.fPoly_Down_a5,
+        fPoly_Down_a4 := G_Parameter.fPoly_Down_a4,
+        fPoly_Down_a3 := G_Parameter.fPoly_Down_a3,
+        fPoly_Down_a2 := G_Parameter.fPoly_Down_a2,
+        fPoly_Down_a1 := G_Parameter.fPoly_Down_a1,
+        fPoly_Down_a0 := G_Parameter.fPoly_Down_a0,
+        fU_FF        => G_Signals.fFF
+    );
+
+    fbPosFB(
+        bEnable    := G_Mode.bEnablePID,
+        fXRef      := G_Signals.fXRef,
+        fXActual   := G_Signals.fPistonPosition,
+        fKp        := G_Parameter.Kp,
+        fKi        := G_Parameter.Ki,
+        fKd        := G_Parameter.Kd,
+        fCycleTime := G_Parameter.fCycleTime,
+        fU_PID     => G_Signals.fPID,
+        fError     => G_Signals.fError
+    );
+
+    G_Signals.fU := LIMIT(-1.0, G_Signals.fFF + G_Signals.fPID, 1.0);
+ELSE
+    // Inaktiv – nullstill
+    fTime := 0.0;
+    fPhase := 0;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

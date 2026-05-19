@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="G_Signals" Id="{cdc7f3b2-beb1-4859-bc50-9b140c75c709}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	// Joystick skalert
+    fJoystickMain       : LREAL;
+    fJoystickJib        : LREAL;
+
+    // Ventilutgang
+    fValveMainOutput    : LREAL;
+    fValveJibOutput     : LREAL;
+
+    // Sensor lesing
+    fSensorMain_V       : LREAL;
+    fSensorJib_V        : LREAL;
+
+    // System status
+    bSystemOk           : BOOL;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

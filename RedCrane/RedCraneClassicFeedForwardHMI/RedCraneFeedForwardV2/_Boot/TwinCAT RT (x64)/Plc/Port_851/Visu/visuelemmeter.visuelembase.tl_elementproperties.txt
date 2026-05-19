@@ -1,0 +1,207 @@
+Id;Default
+XCoordinate;X
+YCoordinate;Y
+Width;Width
+Height;Height
+Angle;Angle
+Color;Color
+Text;Text
+Tooltip;Tooltip
+HoriAlignment;Horizontal alignment
+VertAlignment;Vertical alignment
+Font;Font
+Movement;Movement
+Rotation;Rotation
+Scaling;Scaling
+InteriorRotation;Interior rotation
+MovementTopLeft;Movement top-left
+MovementBottomRight;Movement bottom-right
+LineWidth;Line width
+LineStyle;Line style
+FontName;Font name
+Size;Size
+Flags;Flags
+CharSet;Character set
+TextVariable;Text variable
+TooltipVariable;Tooltip variable
+TextList;Text list
+TextIndex;Text index
+TooltipIndex;Tooltip index
+ToggleColor;Toggle color
+Invisible;Invisible
+InputsDeactivated;Deactivate inputs
+IntValue;Integral value
+DigitalVar;Digital variable
+BitmapID;Bitmap ID
+NormalState;Normal state
+AlarmState;Alarm state
+FrameColor;Frame color
+FillColor;Fill color
+FillStyle;Fill attributes
+PointArray;Array of points
+PointCount;Number of points
+StaticID;Static ID
+ScaleType;Scaling type
+Points;Points
+Left;Left
+Right;Right
+Centered;Centered
+Top;Top
+Bottom;Bottom
+Polygon;Polygon
+Polyline;Polyline
+BeziersCurve;Bézier Curve
+Rectangle;Rectangle
+RoundRectangle;Rounded Rectangle
+Ellipse;Ellipse
+Isotropic;Isotropic
+Anisotropic;Anisotropic
+Fixed;Fixed
+LineSolid;Solid
+Dashed;Dash
+Dotted;Dot
+DashDotted;Dash Dot
+DashDotDotted;Dash Dot Dot
+Hollow;Invisible
+FillSolid;Filled
+Position;Position
+StateVariables;State variables
+Standard;Standard
+Simple;Simple
+Colors;Colors
+Animation;Animation
+Texts;Texts
+Variable;Variable
+Parameter;Parameter
+Orientation;Orientation
+Horizontal;Horizontal
+Vertical;Vertical
+RunningDirection;Running direction
+LeftRight;Left to right
+RightLeft;Right to left
+TopDown;Top to bottom
+BottomUp;Bottom to top
+Desc_LineWidth;The width of the line in pixels
+Desc_FillStyle;The fill style of the element is Filled or Invisible.
+Desc_DynamicFillStyle;The fill style of the element: 0 => Filled, 1 => Invisible
+Desc_LineStyle;The line style of the element is solid, dotted or invisible.
+Desc_DynamicLineStyle;The line style of the element: 0 => Solid 5 => Invisible
+Desc_NormalColor;The color(s) in the normal state of the element
+Desc_AlarmColor;The color(s) in the alarm state of the element
+Desc_HorizontalAlign;The horizontal alignment of texts within this element
+Desc_VerticalAlign;The vertical alignment of texts within this element
+Desc_Font;The font used for drawing text within this element
+Desc_FontName;The name of the font
+Desc_FontSize;The size of the font in pixels
+Desc_FontFlags;The flag combination specifies the style of the font: 1 => Italic, 2 => Bold
+Desc_FontCharSet;The character set number to use with the font
+Desc_FontColor;The color of the font as a RGB value
+Desc_MoveAbsoluteBy;Movement of the whole element in X- and Y-direction
+Desc_RotateBy;Rotation of the whole element around the center in degrees. In fact, the element is moved around the center.
+Desc_ScaleBy;Linear scaling of the whole element based on the center. A value of 1000 means the original size.
+Desc_RotateInteriorBy;Rotation of the whole element around the center in degrees. Here the element itself is rotated.
+Desc_MoveRelativeTopLeft;Movement of the left or top edge of the element
+Desc_MoveRelativeBottomRight;Movement of the right or bottom edge of the element
+Desc_TextListName;The name of the text list
+Desc_TextIndex;The ID of the text to display as defined in the according text list
+Desc_TooltipIndex;The ID of the text to display as tooltip as defined in the according text list
+Desc_ToggleColor;Boolean value to decide about normal color (FALSE) and alarm color (TRUE)
+Desc_StateInputDeactivated;Boolean value to decide whether the element reacts to input events: TRUE => No reaction
+Desc_StateInvisible;Boolean value to decide whether the element is visible: TRUE => invisible
+Desc_StaticImageId;The image ID is used to identify the image for that element from an image pool.
+Desc_ScaleTypeImage;The scaling type is used to scale the image.
+Desc_StaticRectElemPos;The position of this element
+Desc_DynamicPolygonPoints;A pointer to an array of $'VisuStructPoint$' that should be displayed
+Desc_DynamicPolygonPointCount;The number of points referenced by the according pointer
+Desc_TextFormatStrings;The text of this element can be used with placeholders (for example, %s, %d, %5.2f) to display the value of the text variable
+Desc_TooltipFormatStrings;The tooltip of this element can be used with placeholders (for example, %s, %d, %5.2f) to display the value of the tooltip variable
+Desc_NativeControlParameter;A variable value. Its IEC type must match the type expected by the called method.
+Desc_VariableValue;A variable that will be displayed and modified by the element
+Desc_VariableMinValue;A variable value that configures the minimum value of the valid range
+Desc_VariableMaxValue;A variable value that configures the maximum value of the valid range
+Desc_VariablePageSize;A variable value that configures the number of entries to scroll when clicking into the scrolling area
+Desc_GeneralConfiguration;General configuration of this element
+Desc_ScrollbarOrientation;The orientation of the Scroll Bar. The value depends on the ratio of width and height of the Scroll Bar.
+Desc_RunningDirection;The direction in which values are increased
+Desc_StaticColors;The static color configuration of this element
+Desc_TextsFormatStrings;The texts of this element can be used with placeholders (for example, %s, %d, %5.2f) to display the values of text variables
+Desc_StaticTextProperties;The static text properties of this elements to configurate the alignment as well as the font
+Desc_TextVariables;Variables to be displayed within the text or tooltip of this element
+Desc_DynamicTexts;Variables for showing dynamic texts from a text list within this element
+Desc_FontVariables;Variables affecting the font for the text of this element
+Desc_StateVariables;Variables describing the online state of this element like the visibility
+Desc_Scale;The scale configuration of this element
+Desc_FormatCSyntax;The format of the scale value(s) in the printf syntax (for example, %d, %5.2f)
+ImagePool;Image pool
+Desc_ComboImagePool;Optional image pool used for displaying images in this element. The value is used as ID within the image pool to derive the according image.
+Desc_Transparent;Configuration whether the transparent color should be evaluated or not
+Desc_TransparentColor;Configuration of the transparent color to draw pixels of this color transparently
+Transparent;Transparent
+TransparentColor;Transparent color
+Desc_HorizontalAlignBitmap;The horizontal alignment of bitmap within this element
+Desc_VerticalAlignBitmap;The vertical alignment of bitmap within this element
+Flat;Flat
+Square;Square
+Round;Rounded
+Triangle;Triangle
+AlarmColor;Alarm color
+Desc_MoveComplete;If this value is set, the page size is ignored. When you click in the scrolling area, the scroll knob moves completly to the click position.
+MoveComplete;Move to click
+Scrollable;Scrollable
+Array;Array
+Expert;Expert
+AlignmentFlags;Flags for text alignment
+Desc_AlignmentFlags;A flag combination specifies the text alignment: 0 => top/left, 1 => horizontally centered, 2 = right, 4 => vertically centered, 8 => bottom
+Stylevalue;Default style values
+Ownvalue;Individual settings
+TextFlagProperty;Text format
+Desc_TextFlagProperty;Further options to specify display and layout of the text
+TextFlagNone;Default
+TextFlagLinebreak;Line break
+TextFlagEllipsis;Ellipsis
+NormalArrow;Normal arrow
+ThinArrow;Thin arrow
+WideArrow;Wide arrow
+Thin3DArrow;Thin 3D arrow
+Thin3DNeedle;Thin 3D needle
+ThinNeedle;Thin needle
+PageSizeSetting;Page size value
+DTValue;Date and Time value
+VerticalOrientation;Vertical orientation
+Desc_VerticalOrientation;Defines the vertical orientation of the Date Picker
+DateTimePickerAbove;Above
+DateTimePickerBelow;Below
+HorizontalOrientation;Horizontal orientation
+Desc_HorizontalOrientation;Defines the horizontal orientation of the Date Picker
+DateTimePickerCenter;Center
+DateTimePickerLeft;Left
+DateTimePickerRight;Right
+CalendarHeight;Height
+CalendarWidth;Width
+Desc_CalendarHeight;Defines the height of the Date Picker
+Desc_CalendarWidth;Defines the width of the Date Picker
+ScrollingBeginVariable;Scrolling begin
+ScrollingEndVariable;Scrolling end
+ScrollingPageUpVariable;Scrolling page up
+ScrollingPageDownVariable;Scrolling page down
+ScrollingSingleUpVariable;Scrolling single up
+ScrollingSingleDownVariable;Scrolling single down
+Desc_ScrollingBeginVariable;A rising edge of this variable scrolls to the beginning.
+Desc_ScrollingEndVariable;A rising edge of this variable scrolls to the end.
+Desc_ScrollingPageUpVariable;A rising edge of this variable scrolls one page up.
+Desc_ScrollingPageDownVariable;A rising edge of this variable scrolls one page down.
+Desc_ScrollingSingleUpVariable;A rising edge of this variable scrolls one single up.
+Desc_ScrollingSingleDownVariable;A rising edge of this variable scrolls one single down.
+IntervalName;Blink interval
+Desc_IntervalName;The time interval in milliseconds for the blinking of the element
+ScrollableDynamic;Dynamic scrollable
+FontAlarmColor;Font alarm color
+Desc_FontAlarmColor;The font color used during the alarm state within this element
+AbsoluteMovement;Absolute movement
+RelativeMovement;Relative movement
+Center;Center
+Desc_StaticCenter;The center of this element. Used for scaling or rotating, for example.
+Desc_MoveAbsolute;Movement of the whole element.
+Desc_MoveRelative;Movement of single edges of the element. That means modifications of the element form.
+Desc_FrameStaticAngle;The angle by which the element is rotated relative to the specified center point. Note: Offline view can differ from the online view.
+;

@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="GVL" Id="{d8de1da3-164a-4c52-9989-68c201799e9a}">
+    <Declaration><![CDATA[VAR_GLOBAL
+    // ===== System start/stop =====
+    systemRun     : BOOL := FALSE;
+    bLampStart    : BOOL;
+    systemRunTime : REAL := 0.0;
+
+    // ===== Sylinderaktivering =====
+    bBtnManual    : BOOL;        // toggle Jib
+    bBtnAutomatic : BOOL;        // toggle Main
+    bLampBlue     : BOOL;        // Jib aktiv-lampe
+    bLampYellow   : BOOL;        // Main aktiv-lampe
+
+    // ===== Home =====
+    bHomeCmd        : BOOL;
+    bHomeActiveLamp : BOOL;
+
+    // ===== Run =====
+    bRun     : BOOL;
+    bRunLamp : BOOL;
+
+    // ===== FF/PID toggles =====
+    bFeedForward : BOOL;
+    bValve       : BOOL;
+    bFFLamp      : BOOL;
+    bValveLamp   : BOOL;
+
+    // ===== Trajectory =====
+    bBtnSine  : BOOL;
+    bBtnRamp  : BOOL;
+    bLampSine : BOOL;
+    bLampRamp : BOOL;
+
+    // ===== Posisjoner =====
+    fMain_Position_mm : REAL;
+    fJib_Position_mm  : REAL;
+
+    // ===== Trykk =====
+    fMain_Pa_bar      : REAL;
+    fMain_Pb_bar      : REAL;
+    fMain_Pa_Cyl_bar  : REAL;
+    fMain_Pb_Cyl_bar  : REAL;
+    fJib_Pa_bar       : REAL;
+    fJib_Pb_bar       : REAL;
+    fJib_Pa_Cyl_bar   : REAL;
+    fJib_Pb_Cyl_bar   : REAL;
+    fPs_bar           : REAL;
+
+    // ===== Live data – JIB =====
+    fJib_XRef_mm      : REAL;
+    fJib_XReal_mm     : REAL;
+    fJib_Error_mm     : REAL;
+    fJib_U_FF         : REAL;
+    fJib_U_PID        : REAL;
+    fJib_U_total      : REAL;
+    fJib_FF_share_pc  : REAL;
+
+    // ===== Live data – MAIN =====
+    fMain_XRef_mm     : REAL;
+    fMain_XReal_mm    : REAL;
+    fMain_Error_mm    : REAL;
+    fMain_U_FF        : REAL;
+    fMain_U_PID       : REAL;
+    fMain_U_total     : REAL;
+    fMain_FF_share_pc : REAL;
+
+    // ===== Meter =====
+    rMeterValue         : REAL;
+    bSineActive         : BOOL;
+
+    // ===== PID-slidere =====
+    fSliderKp : INT := 10;
+    fSliderKi : INT := 0;
+    fSliderKd : INT := 0;
+
+    // ===== FlowShare =====
+    fFlowShare_Scale_pc : REAL;
+
+    // ===== MICHAEL MOD =====
+    sImage : STRING := 'ImagePool.Michael';
+    bState : BOOL := FALSE;
+	
+	bFlowShare     : BOOL := TRUE;   // HMI-toggle
+	bFlowShareLamp : BOOL;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

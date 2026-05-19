@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_SineWave" Id="{afc18ec7-c77a-4f19-9977-f46b29ceb80c}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_SineWave
+VAR
+    fTime           : LREAL;
+    fbDataFF 		: FB_DataSheetFeedForward;
+    fbPosFB         : FB_PositionFeedback;
+    fbStartDelay    : TON;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbStartDelay(IN := G_IO.bRampButton AND G_Mode.bRunning, PT := T#2S);
+
+IF fbStartDelay.Q AND G_Mode.eTrajectory = E_Trajectory.Sine THEN
+    fTime := fTime + G_Parameter.fCycleTime;
+    
+    G_Signals.fXRef :=
+    G_Parameter.fMean
+    - G_Parameter.fAmplitude
+    * COS(2.0 * 3.14159265 * G_Parameter.fFrequency * fTime);
+
+G_Signals.fXDotRef :=
+    G_Parameter.fAmplitude
+    * 2.0 * 3.14159265
+    * G_Parameter.fFrequency
+    * SIN(2.0 * 3.14159265 * G_Parameter.fFrequency * fTime);
+
+IF G_Signals.fXDotRef >= 0.0 THEN
+    G_Parameter.fU_Deadband := G_Parameter.fU_Deadband_Up;
+ELSE
+    G_Parameter.fU_Deadband := G_Parameter.fU_Deadband_Down;
+END_IF
+	
+    fbDataFF(
+    bEnable     := G_Mode.bEnableFF,
+    fXDotRef    := G_Signals.fXDotRef,
+    fPa         := G_Signals.fPa,
+    fPb         := G_Signals.fPb,
+    fPs         := G_Signals.fPs,
+    fA          := G_Parameter.fAreaA,
+    fAr         := G_Parameter.fAreaB,
+    fQ0_A       := G_Parameter.fQ0_A_Datasheet,
+    fQ0_B       := G_Parameter.fQ0_B_Datasheet,
+    fDp0        := G_Parameter.fDp0_Datasheet,
+    fU_Deadband := G_Parameter.fU_Deadband,
+    fU_FF       => G_Signals.fFF,
+    fQ_Ref      => G_Signals.fQ_Ref_Lmin,
+    fDp         => G_Signals.fDp_bar
+);
+    
+    fbPosFB(
+        bEnable    := G_Mode.bEnablePID,
+        fXRef      := G_Signals.fXRef,
+        fXActual   := G_Signals.fPistonPosition,
+        fKp        := G_Parameter.Kp,
+        fKi        := G_Parameter.Ki,
+        fKd        := G_Parameter.Kd,
+        fCycleTime := G_Parameter.fCycleTime,
+        fU_PID     => G_Signals.fPID,
+        fError     => G_Signals.fError
+    );
+    
+    G_Signals.fU := LIMIT(-1.0, G_Signals.fFF + G_Signals.fPID, 1.0);
+ELSE
+    fTime := 0.0;
+    G_Signals.fU := 0.0;
+    G_Signals.fFF := 0.0;
+    G_Signals.fPID := 0.0;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

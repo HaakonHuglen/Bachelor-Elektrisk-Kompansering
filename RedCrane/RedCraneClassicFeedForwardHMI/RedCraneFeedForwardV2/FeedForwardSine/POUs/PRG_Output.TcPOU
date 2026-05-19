@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_Output" Id="{38ad53a8-e0b2-44d9-bdc3-68bd74eb1d85}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_Output
+VAR
+    fbValve1 : FB_OutputScaling;
+    fbValve2 : FB_OutputScaling;
+    bRunOk1, bRunOk2 : BOOL;
+    fU1, fU2 : LREAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[bRunOk1 := G_IO.bEmergencyStop AND NOT G_IO.bDMA1_Error;
+bRunOk2 := G_IO.bEmergencyStop AND NOT G_IO.bDMA2_Error;
+
+G_Mode.bRunning := bRunOk1 OR bRunOk2;
+
+IF G_Mode.eActiveCyl = E_Cylinder.Jib THEN
+    fU1 := G_Signals.fU;
+    fU2 := 0.0;
+ELSE
+    fU1 := 0.0;
+    fU2 := G_Signals.fU;
+END_IF
+
+fbValve1(
+    fNormalizedInput := fU1,
+    bEnable          := bRunOk1 AND (G_Mode.eActiveCyl = E_Cylinder.Jib),
+    nOutput          => G_IO.nValve1Output
+);
+
+fbValve2(
+    fNormalizedInput := fU2,
+    bEnable          := bRunOk2 AND (G_Mode.eActiveCyl = E_Cylinder.Main),
+    nOutput          => G_IO.nValve2Output
+);
+
+G_IO.bDMA1_Enable := bRunOk1 AND (G_Mode.eActiveCyl = E_Cylinder.Jib);
+G_IO.bDMA2_Enable := bRunOk2 AND (G_Mode.eActiveCyl = E_Cylinder.Main);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

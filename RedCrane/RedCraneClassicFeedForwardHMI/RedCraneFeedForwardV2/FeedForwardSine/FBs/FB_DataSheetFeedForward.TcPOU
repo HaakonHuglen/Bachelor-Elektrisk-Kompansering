@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_DataSheetFeedForward" Id="{dfd5d469-16a5-4d3a-b3e5-c1fbe1b86e33}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_DataSheetFeedForward
+VAR_INPUT
+    bEnable      : BOOL;
+    fXDotRef     : LREAL;       // [m/s] referansehastighet
+    fPa          : LREAL;       // [bar] målt trykk side A
+    fPb          : LREAL;       // [bar] målt trykk side B
+    fPs          : LREAL;       // [bar] forsyningstrykk
+    fA           : LREAL;       // [m^2] piston-side areal
+    fAr          : LREAL;       // [m^2] rod-side areal
+
+    // Ventil-datasheet
+    fQ0_A        : LREAL := 25.0;   // [L/min] nominell flow A-side
+    fQ0_B        : LREAL := 25.0;   // [L/min] nominell flow B-side
+    fDp0         : LREAL := 6.0;    // [bar] referanse-trykkfall fra datasheet
+    fU_Deadband  : LREAL := 0.0;    // [-1..1] deadband-kompensasjon
+END_VAR
+VAR_OUTPUT
+    fU_FF        : LREAL;       // [-1..1] feedforward-kommando
+    fQ_Ref       : LREAL;       // [L/min] forespurt flow (for logging)
+    fDp          : LREAL;       // [bar] aktivt trykkfall (for logging)
+END_VAR
+VAR
+    fQ0_Active     : LREAL;
+    fU_Ideal       : LREAL;
+    fU_Abs         : LREAL;
+    fDirectionSign : LREAL;
+    fA_Active      : LREAL;
+    fDp_Min        : LREAL := 1.0;     // unngå deling på null
+    fVMin          : LREAL := 0.001;   // m/s, dødssone på input
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// ============================================================
+// FB_DataSheetFeedForward
+// Klassisk orifise-basert FF: u = (Q_ref/Q0) * sqrt(dp0/dp)
+// ============================================================
+
+IF NOT bEnable OR ABS(fXDotRef) < fVMin THEN
+    fU_FF  := 0.0;
+    fQ_Ref := 0.0;
+    fDp    := 0.0;
+    RETURN;
+END_IF
+
+// ----- Velg areal og dp avhengig av retning -----
+IF fXDotRef > 0.0 THEN
+    // Piston går opp (extend): P->A, return fra B->T
+    fA_Active      := fA;
+    fDp            := fPs - fPa;
+    fQ0_Active     := fQ0_A;
+    fDirectionSign := 1.0;
+ELSE
+    // Piston går ned (retract): P->B, return fra A->T
+    fA_Active      := fAr;
+    fDp            := fPs - fPb;
+    fQ0_Active     := fQ0_B;
+    fDirectionSign := -1.0;
+END_IF
+
+// ----- Forhindre deling på null -----
+IF fDp < fDp_Min THEN
+    fDp := fDp_Min;
+END_IF
+
+// ----- Beregn forespurt flow [L/min] -----
+fQ_Ref := ABS(fXDotRef) * fA_Active * 60000.0;
+
+// ----- Klassisk orifise-invers -----
+// u_ideal = (Q_ref / Q0) * sqrt(dp0 / dp)
+fU_Ideal := (fQ_Ref / fQ0_Active) * SQRT(fDp0 / fDp);
+fU_Ideal := LIMIT(0.0, fU_Ideal, 1.0);
+
+// ----- Deadband-kompensasjon (0 hvis fU_Deadband = 0) -----
+IF fU_Deadband > 0.0 THEN
+    fU_Abs := fU_Deadband + (1.0 - fU_Deadband) * fU_Ideal;
+ELSE
+    fU_Abs := fU_Ideal;
+END_IF
+
+// ----- Påfør retning -----
+fU_FF := fDirectionSign * fU_Abs;
+
+// ----- Sluttsaturering -----
+fU_FF := LIMIT(-1.0, fU_FF, 1.0);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

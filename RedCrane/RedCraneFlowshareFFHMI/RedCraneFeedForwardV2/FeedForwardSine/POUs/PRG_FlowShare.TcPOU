@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_FlowShare" Id="{a993700b-ff14-43c0-98f4-6f7b856da9ee}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_FlowShare
+VAR
+    fArea_Jib_max  : LREAL;
+    fArea_Main_max : LREAL;
+    fQ_Jib_peak    : LREAL;
+    fQ_Main_peak   : LREAL;
+    fQ_total_peak  : LREAL;
+END_VAR
+
+
+// PROGRAM PRG_FlowShare
+// VAR
+//     fQ_Jib   : LREAL;
+//     fQ_Main  : LREAL;
+//     fArea_Jib  : LREAL;
+//     fArea_Main : LREAL;
+// END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Bruk største areal som worst-case per sylinder
+IF G_Parameter.fJib_AreaA > G_Parameter.fJib_AreaB THEN
+    fArea_Jib_max := G_Parameter.fJib_AreaA;
+ELSE
+    fArea_Jib_max := G_Parameter.fJib_AreaB;
+END_IF
+
+IF G_Parameter.fMain_AreaA > G_Parameter.fMain_AreaB THEN
+    fArea_Main_max := G_Parameter.fMain_AreaA;
+ELSE
+    fArea_Main_max := G_Parameter.fMain_AreaB;
+END_IF
+
+// Peak flow = A * 2π * f * Area * 60000  [L/min]
+fQ_Jib_peak  := G_Parameter.fJib_Amplitude  * 2.0 * 3.14159265
+                * G_Parameter.fJib_Frequency  * fArea_Jib_max  * 60000.0;
+fQ_Main_peak := G_Parameter.fMain_Amplitude * 2.0 * 3.14159265
+                * G_Parameter.fMain_Frequency * fArea_Main_max * 60000.0;
+
+IF NOT G_Mode.bJibActive  THEN fQ_Jib_peak  := 0.0; END_IF
+IF NOT G_Mode.bMainActive THEN fQ_Main_peak := 0.0; END_IF
+
+fQ_total_peak := fQ_Jib_peak + fQ_Main_peak;
+
+G_Signals.fJib_Q_Requested   := fQ_Jib_peak;
+G_Signals.fMain_Q_Requested  := fQ_Main_peak;
+G_Signals.fQ_Total_Requested := fQ_total_peak;
+
+// Beregn tidsskalering
+IF GVL.bFlowShare
+   AND fQ_total_peak > G_Parameter.fQ_PumpMax
+   AND fQ_total_peak > 0.0
+THEN
+    G_Signals.fTimeScale := G_Parameter.fQ_PumpMax / fQ_total_peak;
+ELSE
+    G_Signals.fTimeScale := 1.0;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

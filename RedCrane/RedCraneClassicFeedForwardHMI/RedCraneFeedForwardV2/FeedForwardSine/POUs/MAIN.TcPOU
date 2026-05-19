@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="MAIN" Id="{46e4ed41-8f93-4222-a071-9db8d607668f}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+    tOn       : TON;
+    tHome     : TON;
+
+    fJibV       : LREAL;
+    fMainV      : LREAL;
+    fJib_X_mm   : LREAL;
+    fMain_X_mm  : LREAL;
+    fTempV      : LREAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// ============================================================
+// MAIN — bro mellom HMI (GVL) og sinus-prosjektet (G_*)
+// ============================================================
+
+// -------- 1) System start/stopp --------
+GVL.bLampStart := GVL.systemRun;
+
+tOn(IN := GVL.systemRun, PT := T#9999S);
+IF GVL.systemRun THEN
+    GVL.systemRunTime := TIME_TO_REAL(tOn.ET) / 1000.0;
+ELSE
+    GVL.systemRunTime := 0.0;
+    tOn(IN := FALSE, PT := T#9999S);
+END_IF
+
+// -------- 2) Sylindervalg --------
+// bBtnManual = Main, bBtnAutomatic = Jib
+IF GVL.bBtnManual THEN
+    G_Mode.eActiveCyl := E_Cylinder.Main;
+    GVL.bBtnManual := FALSE;
+END_IF
+IF GVL.bBtnAutomatic THEN
+    G_Mode.eActiveCyl := E_Cylinder.Jib;
+    GVL.bBtnAutomatic := FALSE;
+END_IF
+GVL.bLampBlue   := (G_Mode.eActiveCyl = E_Cylinder.Main);
+GVL.bLampYellow := (G_Mode.eActiveCyl = E_Cylinder.Jib);
+
+// -------- Trajectory-valg Sine / Ramp --------
+IF GVL.bBtnSine THEN
+    G_Mode.eTrajectory := E_Trajectory.Sine;
+    GVL.bBtnSine := FALSE;
+END_IF
+IF GVL.bBtnRamp THEN
+    G_Mode.eTrajectory := E_Trajectory.Ramp;
+    GVL.bBtnRamp := FALSE;
+END_IF
+GVL.bLampSine := (G_Mode.eTrajectory = E_Trajectory.Sine);
+GVL.bLampRamp := (G_Mode.eTrajectory = E_Trajectory.Ramp);
+
+// -------- 3) Home --------
+IF GVL.bHomeCmd THEN
+    tHome(IN := TRUE, PT := T#5S);
+    GVL.bHomeCmd := FALSE;
+END_IF
+IF tHome.IN THEN
+    tHome(IN := TRUE, PT := T#5S);
+END_IF
+GVL.bHomeActiveLamp := tHome.IN AND NOT tHome.Q;
+IF tHome.Q THEN
+    tHome(IN := FALSE, PT := T#5S);
+END_IF
+
+// -------- 4) FF / PID toggles --------
+// bFeedForward = FF-knapp, bValve = PID-knapp 
+G_Mode.bEnableFF  := GVL.bFeedForward;
+G_Mode.bEnablePID := GVL.bValve;
+
+GVL.bFFLamp    := G_Mode.bEnableFF;
+GVL.bValveLamp := G_Mode.bEnablePID;
+
+// -------- 5) PID-tuning fra slidere --------
+G_Parameter.Kp := INT_TO_LREAL(GVL.fSliderKp);
+G_Parameter.Ki := INT_TO_LREAL(GVL.fSliderKi);
+G_Parameter.Kd := INT_TO_LREAL(GVL.fSliderKd);
+
+// -------- 6) Run-trigger til sinus --------
+G_IO.bRampButton := GVL.bRun AND GVL.systemRun;
+GVL.bSineActive  := G_IO.bRampButton;
+
+IF GVL.systemRun AND GVL.bRun THEN
+    GVL.bRunLamp := TRUE;
+ELSE
+    GVL.bRunLamp := FALSE;
+END_IF
+
+// ============================================================
+// Kall programmene
+// ============================================================
+PRG_ScaledInputs();
+PRG_SineWave();
+PRG_Output();
+
+// ============================================================
+// Eksponer data til HMI
+// ============================================================
+
+// ----- Live sinus-data (aktiv sylinder) -----
+GVL.fXRef_mm  := LREAL_TO_REAL(G_Signals.fXRef * 1000.0);
+GVL.fXReal_mm := LREAL_TO_REAL(G_Signals.fPistonPosition * 1000.0);
+GVL.fError_mm := LREAL_TO_REAL(G_Signals.fError * 1000.0);
+GVL.fU_FF     := LREAL_TO_REAL(G_Signals.fFF);
+GVL.fU_PID    := LREAL_TO_REAL(G_Signals.fPID);
+GVL.fU_total  := LREAL_TO_REAL(G_Signals.fU);
+
+IF ABS(GVL.fU_total) > 0.001 THEN
+    GVL.fFF_share_pc := ABS(GVL.fU_FF) / ABS(GVL.fU_total) * 100.0;
+ELSE
+    GVL.fFF_share_pc := 0.0;
+END_IF
+
+// rMeterValue = aktiv sylinders posisjon (mm)
+GVL.rMeterValue := GVL.fXReal_mm;
+
+// ----- Posisjon for begge sylindre samtidig -----
+fJibV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawCylinder1) / 32767.0 * 10.0, 10.0);
+fJib_X_mm := (fJibV - G_Parameter.fJib_Vmin)
+             / (G_Parameter.fJib_Vmax - G_Parameter.fJib_Vmin)
+             * G_Parameter.fJib_Stroke * 1000.0;
+
+// ----- Kalibrering for konsistens med PID -----
+ fJib_X_mm :=
+       -2.6766141745E-05 * EXPT(fJib_X_mm, 2)
+     +  9.9764623655E-01 * fJib_X_mm
+     +  1.8743836626E+01;
+// ----------------------------------------------
+
+GVL.fJib_Position_mm := LREAL_TO_REAL(LIMIT(0.0, fJib_X_mm, G_Parameter.fJib_Stroke * 1000.0));
+
+fMainV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawCylinder2) / 32767.0 * 10.0, 10.0);
+fMain_X_mm := (fMainV - G_Parameter.fMain_Vmin)
+              / (G_Parameter.fMain_Vmax - G_Parameter.fMain_Vmin)
+              * G_Parameter.fMain_Stroke * 1000.0;
+GVL.fMain_Position_mm := LREAL_TO_REAL(LIMIT(0.0, fMain_X_mm, G_Parameter.fMain_Stroke * 1000.0));
+
+// ----- Trykk for begge sylindre -----
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres1A) / 32767.0 * 10.0, 10.0);
+GVL.fJib_Pa_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres1B) / 32767.0 * 10.0, 10.0);
+GVL.fJib_Pb_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres2A) / 32767.0 * 10.0, 10.0);
+GVL.fMain_Pa_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres2B) / 32767.0 * 10.0, 10.0);
+GVL.fMain_Pb_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPresSupply) / 32767.0 * 10.0, 10.0);
+GVL.fPs_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+// ----- Cylinder-trykk -----
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres2A_Cyl) / 32767.0 * 10.0, 10.0);
+GVL.fMain_Pa_Cyl_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres1A_Cyl) / 32767.0 * 10.0, 10.0);
+GVL.fJib_Pa_Cyl_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres1B_Cyl) / 32767.0 * 10.0, 10.0);
+GVL.fJib_Pb_Cyl_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+
+// MICHAEL MOD
+IF 	GVL.bRun THEN
+	GVL.sImage := 'ImagePool.Michael1';
+ELSE
+	GVL.sImage := 'ImagePool.Michael';
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="G_Signals" Id="{6ee47b90-c5c2-4a42-a26c-da235ebd28c0}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+    // ===== JIB – sensorverdier =====
+    fJib_Pa             : LREAL;
+    fJib_Pb             : LREAL;
+    fJib_PistonPos      : LREAL;
+    fJib_Spool          : LREAL;
+
+    // ===== JIB – referanse og kontroll =====
+    fJib_XRef           : LREAL;
+    fJib_XDotRef        : LREAL;
+    fJib_FF             : LREAL;
+    fJib_PID            : LREAL;
+    fJib_U              : LREAL;
+    fJib_Error          : LREAL;
+
+    // ===== MAIN – sensorverdier =====
+    fMain_Pa            : LREAL;
+    fMain_Pb            : LREAL;
+    fMain_PistonPos     : LREAL;
+    fMain_Spool         : LREAL;
+
+    // ===== MAIN – referanse og kontroll =====
+    fMain_XRef          : LREAL;
+    fMain_XDotRef       : LREAL;
+    fMain_FF            : LREAL;
+    fMain_PID           : LREAL;
+    fMain_U             : LREAL;
+    fMain_Error         : LREAL;
+
+    // ===== Felles =====
+    fPs                 : LREAL;
+    fFlowShare_Scale    : LREAL;
+	
+	fJib_Q_Requested   : LREAL;
+	fMain_Q_Requested  : LREAL;
+	fQ_Total_Requested : LREAL;
+//	fAlpha             : LREAL;
+	fTimeScale : LREAL := 1.0;   // [0-1], 1 = full hastighet, <1 = saktere
+	fJib_U_Requested   : LREAL;   // FF+PID før skalering
+	fMain_U_Requested  : LREAL;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

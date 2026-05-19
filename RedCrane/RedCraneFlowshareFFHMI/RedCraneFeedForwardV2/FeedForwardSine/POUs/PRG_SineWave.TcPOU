@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_SineWave" Id="{afc18ec7-c77a-4f19-9977-f46b29ceb80c}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_SineWave
+VAR
+    fJib_Time    : LREAL;
+    fbJib_KvFF   : FB_KvFeedForward;
+    fbJib_PosFB  : FB_PositionFeedback;
+    fbJib_Delay  : TON;
+
+    fMain_Time   : LREAL;
+    fbMain_KvFF  : FB_KvFeedForward;
+    fbMain_PosFB : FB_PositionFeedback;
+    fbMain_Delay : TON;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF G_Mode.eTrajectory <> E_Trajectory.Sine THEN
+    fJib_Time  := 0.0;
+    fMain_Time := 0.0;
+    RETURN;
+END_IF
+
+// ── JIB ─────────────────────────────────────────────────────────────
+fbJib_Delay(IN := G_IO.bRampButton AND G_Mode.bRunning AND G_Mode.bJibActive,
+            PT := T#2S);
+
+IF fbJib_Delay.Q THEN
+    fJib_Time := fJib_Time + G_Parameter.fCycleTime * G_Signals.fTimeScale;
+
+    G_Signals.fJib_XRef :=
+        G_Parameter.fJib_Mean
+        - G_Parameter.fJib_Amplitude
+        * COS(2.0 * 3.14159265 * G_Parameter.fJib_Frequency * fJib_Time);
+
+    G_Signals.fJib_XDotRef :=
+        G_Parameter.fJib_Amplitude
+        * 2.0 * 3.14159265
+        * G_Parameter.fJib_Frequency
+        * G_Signals.fTimeScale
+        * SIN(2.0 * 3.14159265 * G_Parameter.fJib_Frequency * fJib_Time);
+
+    fbJib_KvFF(
+        bEnable       := G_Mode.bEnableFF,
+        fXDotRef      := G_Signals.fJib_XDotRef,
+        fPa           := G_Signals.fJib_Pa,
+        fPb           := G_Signals.fJib_Pb,
+        fPs           := G_Signals.fPs,
+        fA            := G_Parameter.fJib_AreaA,
+        fAr           := G_Parameter.fJib_AreaB,
+        fPoly_Up_a5   := G_Parameter.fJib_Up_a5,
+        fPoly_Up_a4   := G_Parameter.fJib_Up_a4,
+        fPoly_Up_a3   := G_Parameter.fJib_Up_a3,
+        fPoly_Up_a2   := G_Parameter.fJib_Up_a2,
+        fPoly_Up_a1   := G_Parameter.fJib_Up_a1,
+        fPoly_Up_a0   := G_Parameter.fJib_Up_a0,
+        fPoly_Down_a5 := G_Parameter.fJib_Down_a5,
+        fPoly_Down_a4 := G_Parameter.fJib_Down_a4,
+        fPoly_Down_a3 := G_Parameter.fJib_Down_a3,
+        fPoly_Down_a2 := G_Parameter.fJib_Down_a2,
+        fPoly_Down_a1 := G_Parameter.fJib_Down_a1,
+        fPoly_Down_a0 := G_Parameter.fJib_Down_a0,
+        fU_FF         => G_Signals.fJib_FF
+    );
+
+    fbJib_PosFB(
+        bEnable    := G_Mode.bEnablePID,
+        fXRef      := G_Signals.fJib_XRef,
+        fXActual   := G_Signals.fJib_PistonPos,
+        fKp        := G_Parameter.fJib_Kp,
+        fKi        := G_Parameter.fJib_Ki,
+        fKd        := G_Parameter.fJib_Kd,
+        fCycleTime := G_Parameter.fCycleTime,
+        fU_PID     => G_Signals.fJib_PID,
+        fError     => G_Signals.fJib_Error
+    );
+
+    G_Signals.fJib_U := LIMIT(-1.0, G_Signals.fJib_FF + G_Signals.fJib_PID, 1.0);
+ELSE
+    fJib_Time          := 0.0;
+    G_Signals.fJib_U   := 0.0;
+    G_Signals.fJib_FF  := 0.0;
+    G_Signals.fJib_PID := 0.0;
+END_IF
+
+// ── MAIN ─────────────────────────────────────────────────────────────
+fbMain_Delay(IN := G_IO.bRampButton AND G_Mode.bRunning AND G_Mode.bMainActive,
+             PT := T#2S);
+
+IF fbMain_Delay.Q THEN
+    fMain_Time := fMain_Time + G_Parameter.fCycleTime * G_Signals.fTimeScale;
+
+    G_Signals.fMain_XRef :=
+        G_Parameter.fMain_Mean
+        - G_Parameter.fMain_Amplitude
+        * COS(2.0 * 3.14159265 * G_Parameter.fMain_Frequency * fMain_Time);
+
+    G_Signals.fMain_XDotRef :=
+        G_Parameter.fMain_Amplitude
+        * 2.0 * 3.14159265
+        * G_Parameter.fMain_Frequency
+        * G_Signals.fTimeScale
+        * SIN(2.0 * 3.14159265 * G_Parameter.fMain_Frequency * fMain_Time);
+
+    fbMain_KvFF(
+        bEnable       := G_Mode.bEnableFF,
+        fXDotRef      := G_Signals.fMain_XDotRef,
+        fPa           := G_Signals.fMain_Pa,
+        fPb           := G_Signals.fMain_Pb,
+        fPs           := G_Signals.fPs,
+        fA            := G_Parameter.fMain_AreaA,
+        fAr           := G_Parameter.fMain_AreaB,
+        fPoly_Up_a5   := G_Parameter.fMain_Up_a5,
+        fPoly_Up_a4   := G_Parameter.fMain_Up_a4,
+        fPoly_Up_a3   := G_Parameter.fMain_Up_a3,
+        fPoly_Up_a2   := G_Parameter.fMain_Up_a2,
+        fPoly_Up_a1   := G_Parameter.fMain_Up_a1,
+        fPoly_Up_a0   := G_Parameter.fMain_Up_a0,
+        fPoly_Down_a5 := G_Parameter.fMain_Down_a5,
+        fPoly_Down_a4 := G_Parameter.fMain_Down_a4,
+        fPoly_Down_a3 := G_Parameter.fMain_Down_a3,
+        fPoly_Down_a2 := G_Parameter.fMain_Down_a2,
+        fPoly_Down_a1 := G_Parameter.fMain_Down_a1,
+        fPoly_Down_a0 := G_Parameter.fMain_Down_a0,
+        fU_FF         => G_Signals.fMain_FF
+    );
+
+    fbMain_PosFB(
+        bEnable    := G_Mode.bEnablePID,
+        fXRef      := G_Signals.fMain_XRef,
+        fXActual   := G_Signals.fMain_PistonPos,
+        fKp        := G_Parameter.fMain_Kp,
+        fKi        := G_Parameter.fMain_Ki,
+        fKd        := G_Parameter.fMain_Kd,
+        fCycleTime := G_Parameter.fCycleTime,
+        fU_PID     => G_Signals.fMain_PID,
+        fError     => G_Signals.fMain_Error
+    );
+
+    G_Signals.fMain_U := LIMIT(-1.0, G_Signals.fMain_FF + G_Signals.fMain_PID, 1.0);
+ELSE
+    fMain_Time          := 0.0;
+    G_Signals.fMain_U   := 0.0;
+    G_Signals.fMain_FF  := 0.0;
+    G_Signals.fMain_PID := 0.0;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

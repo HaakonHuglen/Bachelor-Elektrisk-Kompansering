@@ -1,0 +1,6 @@
+Id;Default
+MinVal;Min value:
+MaxVal;Max value:
+MinLen;Min length:
+MaxLen;Max length:
+;

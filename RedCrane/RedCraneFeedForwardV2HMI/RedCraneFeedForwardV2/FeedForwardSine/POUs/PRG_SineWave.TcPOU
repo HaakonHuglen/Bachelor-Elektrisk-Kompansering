@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_SineWave" Id="{afc18ec7-c77a-4f19-9977-f46b29ceb80c}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_SineWave
+VAR
+    fTime           : LREAL;
+    fbKvFF          : FB_KvFeedForward;
+    fbPosFB         : FB_PositionFeedback;
+    fbStartDelay    : TON;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbStartDelay(IN := G_IO.bRampButton AND G_Mode.bRunning, PT := T#2S);
+
+IF fbStartDelay.Q AND G_Mode.eTrajectory = E_Trajectory.Sine THEN
+    fTime := fTime + G_Parameter.fCycleTime;
+    
+    G_Signals.fXRef :=
+    G_Parameter.fMean
+    - G_Parameter.fAmplitude
+    * COS(2.0 * 3.14159265 * G_Parameter.fFrequency * fTime);
+
+G_Signals.fXDotRef :=
+    G_Parameter.fAmplitude
+    * 2.0 * 3.14159265
+    * G_Parameter.fFrequency
+    * SIN(2.0 * 3.14159265 * G_Parameter.fFrequency * fTime);
+
+	
+    fbKvFF(
+        bEnable      := G_Mode.bEnableFF,
+        fXDotRef     := G_Signals.fXDotRef,
+        fPa          := G_Signals.fPa,
+        fPb          := G_Signals.fPb,
+        fPs          := G_Signals.fPs,
+        fA           := G_Parameter.fAreaA,
+        fAr          := G_Parameter.fAreaB,
+        fPoly_Up_a5  := G_Parameter.fPoly_Up_a5,
+        fPoly_Up_a4  := G_Parameter.fPoly_Up_a4,
+        fPoly_Up_a3  := G_Parameter.fPoly_Up_a3,
+        fPoly_Up_a2  := G_Parameter.fPoly_Up_a2,
+        fPoly_Up_a1  := G_Parameter.fPoly_Up_a1,
+        fPoly_Up_a0  := G_Parameter.fPoly_Up_a0,
+        fPoly_Down_a5 := G_Parameter.fPoly_Down_a5,
+        fPoly_Down_a4 := G_Parameter.fPoly_Down_a4,
+        fPoly_Down_a3 := G_Parameter.fPoly_Down_a3,
+        fPoly_Down_a2 := G_Parameter.fPoly_Down_a2,
+        fPoly_Down_a1 := G_Parameter.fPoly_Down_a1,
+        fPoly_Down_a0 := G_Parameter.fPoly_Down_a0,
+        fU_FF        => G_Signals.fFF
+    );
+    
+    fbPosFB(
+        bEnable    := G_Mode.bEnablePID,
+        fXRef      := G_Signals.fXRef,
+        fXActual   := G_Signals.fPistonPosition,
+        fKp        := G_Parameter.Kp,
+        fKi        := G_Parameter.Ki,
+        fKd        := G_Parameter.Kd,
+        fCycleTime := G_Parameter.fCycleTime,
+        fU_PID     => G_Signals.fPID,
+        fError     => G_Signals.fError
+    );
+    
+    G_Signals.fU := LIMIT(-1.0, G_Signals.fFF + G_Signals.fPID, 1.0);
+ELSE
+    fTime := 0.0;
+    G_Signals.fU := 0.0;
+    G_Signals.fFF := 0.0;
+    G_Signals.fPID := 0.0;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

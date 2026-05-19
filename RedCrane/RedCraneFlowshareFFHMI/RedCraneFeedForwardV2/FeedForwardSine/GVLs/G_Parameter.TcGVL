@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="G_Parameter" Id="{20ea7e22-ac41-46d0-8f27-3ff6735f0cc1}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+    // ===== JIB CYLINDER (ø150/ø100, stroke 855 mm) =====
+    fJib_AreaA      : LREAL := 0.01767146;
+    fJib_AreaB      : LREAL := 0.00981748;
+    fJib_Stroke     : LREAL := 0.855;
+    fJib_Vmin       : LREAL := 1.0;
+    fJib_Vmax       : LREAL := 7.6;
+
+    fJib_Up_a5      : LREAL :=  1.2782638114E-03;
+    fJib_Up_a4      : LREAL := -1.6088527371E-02;
+    fJib_Up_a3      : LREAL :=  7.3066487585E-02;
+    fJib_Up_a2      : LREAL := -1.4296722747E-01;
+    fJib_Up_a1      : LREAL :=  2.2394470552E-01;
+    fJib_Up_a0      : LREAL :=  2.3746764478E-01;
+
+    fJib_Down_a5    : LREAL := -3.9564759289E-03;
+    fJib_Down_a4    : LREAL :=  4.4182246532E-02;
+    fJib_Down_a3    : LREAL := -1.7596254172E-01;
+    fJib_Down_a2    : LREAL :=  2.9050955948E-01;
+    fJib_Down_a1    : LREAL := -2.8521787682E-01;
+    fJib_Down_a0    : LREAL := -1.7038895368E-01;
+
+    // ===== MAIN CYLINDER (ø160/ø100, stroke 743 mm) =====
+    fMain_AreaA     : LREAL := 0.02010619;
+    fMain_AreaB     : LREAL := 0.01225221;
+    fMain_Stroke    : LREAL := 0.743;
+    fMain_Vmin      : LREAL := 2.03;
+    fMain_Vmax      : LREAL := 7.924;
+
+    fMain_Up_a5     : LREAL :=  7.1494408773E-04;
+    fMain_Up_a4     : LREAL := -1.0009185688E-02;
+    fMain_Up_a3     : LREAL :=  5.0292811747E-02;
+    fMain_Up_a2     : LREAL := -1.0886516780E-01;
+    fMain_Up_a1     : LREAL :=  2.0677542004E-01;
+    fMain_Up_a0     : LREAL :=  2.3438288370E-01;
+
+    fMain_Down_a5   : LREAL := -1.3063349639E-03;
+    fMain_Down_a4   : LREAL :=  1.6877559214E-02;
+    fMain_Down_a3   : LREAL := -7.8541245328E-02;
+    fMain_Down_a2   : LREAL :=  1.5603273194E-01;
+    fMain_Down_a1   : LREAL := -2.4076519579E-01;
+    fMain_Down_a0   : LREAL := -2.1351759561E-01;
+
+    // ===== COMMON =====
+    fPresMaxBar     : LREAL := 400.0;
+    fCycleTime      : LREAL := 0.01;
+
+    // ===== SINE PARAMETERS – JIB =====
+    fJib_Mean       : LREAL := 0.3;
+    fJib_Amplitude  : LREAL := 0.1;
+    fJib_Frequency  : LREAL := 0.05;
+
+    // ===== SINE PARAMETERS – MAIN =====
+    fMain_Mean      : LREAL := 0.5;
+    fMain_Amplitude : LREAL := 0.1;
+    fMain_Frequency : LREAL := 0.05;
+
+    // ===== PID – JIB =====
+    fJib_Kp         : LREAL := 20.0;
+    fJib_Ki         : LREAL := 0.0;
+    fJib_Kd         : LREAL := 0.0;
+
+    // ===== PID – MAIN =====
+    fMain_Kp        : LREAL := 20.0;
+    fMain_Ki        : LREAL := 0.0;
+    fMain_Kd        : LREAL := 0.0;
+
+    // ===== RAMP PARAMETERS =====
+    fRamp_X1        : LREAL := 0.35;
+    fRamp_X2        : LREAL := 0.45;
+    fRamp_Duration  : LREAL := 5.0;
+    fRamp_HoldTime  : LREAL := 1.0;
+
+    // ===== Bakoverkompatibilitet for HMI-slidere =====
+    Kp              : LREAL := 20.0;
+    Ki              : LREAL := 0.0;
+    Kd              : LREAL := 0.0;
+	
+	fQ_PumpMax : LREAL := 60.0;   // [L/min] – pumpekapasitet
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

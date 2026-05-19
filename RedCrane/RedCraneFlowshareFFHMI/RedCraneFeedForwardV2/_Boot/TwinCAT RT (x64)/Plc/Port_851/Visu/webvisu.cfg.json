@@ -1,0 +1,24 @@
+
+{
+	"UpdateRate": 200,
+	"PlcAddress": "851",
+	"UseLocalHost": true,
+	"Application": "Port_851",
+	"StartVisu": "Visualization",
+	"BestFit": true,
+	"LogLevel": "INFO",
+	"CommBufferSize": 50000,
+	"HasKeyboard": false,
+	"TouchHandlingActive": false,
+	"HandleTouchEvents": true,
+	"ScaleTypeIsotropic": true,
+	"BestFitForDialogs": true,
+	"RuntimeVersion": "3.5.21.10",
+	"LoginVisu": "",
+	"FillBackground": true,
+	"LoginVisuTexts": "",
+	"LoginVisuErrorTexts": "implicit_loginvisu_errors_textlist.txt",
+	"LoginVisuNamespace": "",
+	"LoginVisuDefLang": "",
+    "UseBrowserLanguage": true
+}

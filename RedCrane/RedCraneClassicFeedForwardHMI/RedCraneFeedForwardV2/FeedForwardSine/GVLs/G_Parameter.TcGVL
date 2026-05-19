@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="G_Parameter" Id="{20ea7e22-ac41-46d0-8f27-3ff6735f0cc1}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+    // ===== JIB CYLINDER (ø150/ø100, stroke 855 mm) =====
+    fJib_AreaA      : LREAL := 0.01767146;
+    fJib_AreaB      : LREAL := 0.00981748;
+    fJib_Stroke     : LREAL := 0.855;
+    fJib_Vmin       : LREAL := 1.0;
+    fJib_Vmax       : LREAL := 7.6;
+    
+    // ===== MAIN CYLINDER (ø160/ø100, stroke 743 mm) =====
+    fMain_AreaA     : LREAL := 0.02010619;
+    fMain_AreaB     : LREAL := 0.01225221;
+    fMain_Stroke    : LREAL := 0.743;
+    fMain_Vmin      : LREAL := 2.03;
+    fMain_Vmax      : LREAL := 7.924;
+    
+    // ===== ACTIVE PARAMETERS (set by PRG_ScaledInputs) =====
+    fAreaA          : LREAL;
+    fAreaB          : LREAL;
+    
+    // ===== COMMON =====
+    fPresMaxBar     : LREAL := 400.0;
+    fCycleTime      : LREAL := 0.01;
+    
+    // ===== SINE PARAMETERS =====
+    fMean           : LREAL := 0.4;     // [m]
+    fAmplitude      : LREAL := 0.05;    // [m]
+    fFrequency      : LREAL := 0.05;    // [Hz]
+    
+    // ===== PID =====
+    Kp              : LREAL := 20.0;
+    Ki              : LREAL := 0.0;
+    Kd              : LREAL := 0.0;
+	
+	// ===== RAMP PARAMETERS =====
+	fRamp_X1       : LREAL := 0.35;    // [m] start-posisjon
+	fRamp_X2       : LREAL := 0.45;    // [m] slutt-posisjon
+	fRamp_Duration : LREAL := 5.0;     // [s] tid for én rampe
+	fRamp_HoldTime : LREAL := 1.0;     // [s] hold ved hver ende
+	
+	// ===== DATASHEET FF (HAWE SLF3-A2, L25/25) =====
+	fQ0_A_Datasheet      : LREAL := 25.0;    // [L/min]
+	fQ0_B_Datasheet      : LREAL := 25.0;    // [L/min]
+	fDp0_Datasheet       : LREAL := 6.0;     // [bar]
+	fU_Deadband_Up  : LREAL := 0.234; 		 // extend (23.4%)
+	fU_Deadband_Down: LREAL := 0.216;  		 // retract (21.6%)
+	fU_Deadband     : LREAL := 0.0;  	     // aktiv verdi, settes av PRG_SineWave
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

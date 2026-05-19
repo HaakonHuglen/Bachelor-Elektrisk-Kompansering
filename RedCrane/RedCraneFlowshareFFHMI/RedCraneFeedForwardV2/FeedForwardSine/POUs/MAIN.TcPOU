@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="MAIN" Id="{46e4ed41-8f93-4222-a071-9db8d607668f}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+    tOn      : TON;
+    tHome    : TON;
+    fTempV   : LREAL;
+    fJibV    : LREAL;
+    fJib_X_mm  : LREAL;
+    fMainV   : LREAL;
+    fMain_X_mm : LREAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// ── 1) System start/stopp ────────────────────────────────────────────
+GVL.bLampStart := GVL.systemRun;
+
+tOn(IN := GVL.systemRun, PT := T#9999S);
+IF GVL.systemRun THEN
+    GVL.systemRunTime := TIME_TO_REAL(tOn.ET) / 1000.0;
+ELSE
+    GVL.systemRunTime := 0.0;
+    tOn(IN := FALSE, PT := T#9999S);
+END_IF
+
+// ── 2) Sylinderaktivering – TOGGLE ───────────────────────────────────
+// bBtnManual → toggle Jib,  bBtnAutomatic → toggle Main
+IF GVL.bBtnManual THEN
+    G_Mode.bJibActive := NOT G_Mode.bJibActive;
+    GVL.bBtnManual    := FALSE;
+END_IF
+IF GVL.bBtnAutomatic THEN
+    G_Mode.bMainActive := NOT G_Mode.bMainActive;
+    GVL.bBtnAutomatic  := FALSE;
+END_IF
+
+GVL.bLampBlue   := G_Mode.bJibActive;
+GVL.bLampYellow := G_Mode.bMainActive;
+
+// ── 3) Trajectory ────────────────────────────────────────────────────
+IF GVL.bBtnSine THEN
+    G_Mode.eTrajectory := E_Trajectory.Sine;
+    GVL.bBtnSine       := FALSE;
+END_IF
+IF GVL.bBtnRamp THEN
+    G_Mode.eTrajectory := E_Trajectory.Ramp;
+    GVL.bBtnRamp       := FALSE;
+END_IF
+GVL.bLampSine := (G_Mode.eTrajectory = E_Trajectory.Sine);
+GVL.bLampRamp := (G_Mode.eTrajectory = E_Trajectory.Ramp);
+
+// ── 4) Home ──────────────────────────────────────────────────────────
+IF GVL.bHomeCmd THEN
+    tHome(IN := TRUE, PT := T#5S);
+    GVL.bHomeCmd := FALSE;
+END_IF
+IF tHome.IN THEN
+    tHome(IN := TRUE, PT := T#5S);
+END_IF
+GVL.bHomeActiveLamp := tHome.IN AND NOT tHome.Q;
+IF tHome.Q THEN
+    tHome(IN := FALSE, PT := T#5S);
+END_IF
+
+// ── 5) FF / PID ──────────────────────────────────────────────────────
+G_Mode.bEnableFF  := GVL.bFeedForward;
+G_Mode.bEnablePID := GVL.bValve;
+GVL.bFFLamp    := G_Mode.bEnableFF;
+GVL.bValveLamp := G_Mode.bEnablePID;
+
+// ── 6) PID-tuning fra slidere (felles for begge) ─────────────────────
+G_Parameter.fJib_Kp  := INT_TO_LREAL(GVL.fSliderKp);
+G_Parameter.fJib_Ki  := INT_TO_LREAL(GVL.fSliderKi);
+G_Parameter.fJib_Kd  := INT_TO_LREAL(GVL.fSliderKd);
+G_Parameter.fMain_Kp := INT_TO_LREAL(GVL.fSliderKp);
+G_Parameter.fMain_Ki := INT_TO_LREAL(GVL.fSliderKi);
+G_Parameter.fMain_Kd := INT_TO_LREAL(GVL.fSliderKd);
+
+// ── 7) Run-trigger ───────────────────────────────────────────────────
+G_IO.bRampButton := GVL.bRun AND GVL.systemRun;
+GVL.bSineActive  := G_IO.bRampButton;
+GVL.bRunLamp     := GVL.systemRun AND GVL.bRun;
+
+// ── Kall programmene ─────────────────────────────────────────────────
+PRG_ScaledInputs();
+PRG_SineWave();
+PRG_RampWave();
+PRG_FlowShare();   
+PRG_Output();
+
+// ── Eksponer HMI-data – JIB ──────────────────────────────────────────
+GVL.fJib_XRef_mm     := LREAL_TO_REAL(G_Signals.fJib_XRef      * 1000.0);
+GVL.fJib_XReal_mm    := LREAL_TO_REAL(G_Signals.fJib_PistonPos * 1000.0);
+GVL.fJib_Error_mm    := LREAL_TO_REAL(G_Signals.fJib_Error     * 1000.0);
+GVL.fJib_U_FF        := LREAL_TO_REAL(G_Signals.fJib_FF);
+GVL.fJib_U_PID       := LREAL_TO_REAL(G_Signals.fJib_PID);
+GVL.fJib_U_total     := LREAL_TO_REAL(G_Signals.fJib_U);
+IF ABS(GVL.fJib_U_total) > 0.001 THEN
+    GVL.fJib_FF_share_pc := ABS(GVL.fJib_U_FF) / ABS(GVL.fJib_U_total) * 100.0;
+ELSE
+    GVL.fJib_FF_share_pc := 0.0;
+END_IF
+
+// ── Eksponer HMI-data – MAIN ─────────────────────────────────────────
+GVL.fMain_XRef_mm     := LREAL_TO_REAL(G_Signals.fMain_XRef      * 1000.0);
+GVL.fMain_XReal_mm    := LREAL_TO_REAL(G_Signals.fMain_PistonPos * 1000.0);
+GVL.fMain_Error_mm    := LREAL_TO_REAL(G_Signals.fMain_Error     * 1000.0);
+GVL.fMain_U_FF        := LREAL_TO_REAL(G_Signals.fMain_FF);
+GVL.fMain_U_PID       := LREAL_TO_REAL(G_Signals.fMain_PID);
+GVL.fMain_U_total     := LREAL_TO_REAL(G_Signals.fMain_U);
+IF ABS(GVL.fMain_U_total) > 0.001 THEN
+    GVL.fMain_FF_share_pc := ABS(GVL.fMain_U_FF) / ABS(GVL.fMain_U_total) * 100.0;
+ELSE
+    GVL.fMain_FF_share_pc := 0.0;
+END_IF
+
+// ── Bakoverkompatibelt meter ─────────────────────────────────────────
+IF G_Mode.bJibActive THEN
+    GVL.rMeterValue := GVL.fJib_XReal_mm;
+ELSE
+    GVL.rMeterValue := GVL.fMain_XReal_mm;
+END_IF
+
+// ── Posisjonsvisning begge sylindre ──────────────────────────────────
+fJibV     := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawCylinder1) / 32767.0 * 10.0, 10.0);
+fJib_X_mm := (fJibV - G_Parameter.fJib_Vmin)
+             / (G_Parameter.fJib_Vmax - G_Parameter.fJib_Vmin)
+             * G_Parameter.fJib_Stroke * 1000.0;
+fJib_X_mm :=
+       -2.6766141745E-05 * EXPT(fJib_X_mm, 2)
+    +   9.9764623655E-01 * fJib_X_mm
+    +   1.8743836626E+01;
+GVL.fJib_Position_mm :=
+    LREAL_TO_REAL(LIMIT(0.0, fJib_X_mm, G_Parameter.fJib_Stroke * 1000.0));
+
+fMainV     := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawCylinder2) / 32767.0 * 10.0, 10.0);
+fMain_X_mm := (fMainV - G_Parameter.fMain_Vmin)
+              / (G_Parameter.fMain_Vmax - G_Parameter.fMain_Vmin)
+              * G_Parameter.fMain_Stroke * 1000.0;
+GVL.fMain_Position_mm :=
+    LREAL_TO_REAL(LIMIT(0.0, fMain_X_mm, G_Parameter.fMain_Stroke * 1000.0));
+
+// ── Trykk ────────────────────────────────────────────────────────────
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres1A) / 32767.0 * 10.0, 10.0);
+GVL.fJib_Pa_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres1B) / 32767.0 * 10.0, 10.0);
+GVL.fJib_Pb_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres2A) / 32767.0 * 10.0, 10.0);
+GVL.fMain_Pa_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres2B) / 32767.0 * 10.0, 10.0);
+GVL.fMain_Pb_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPresSupply) / 32767.0 * 10.0, 10.0);
+GVL.fPs_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres2A_Cyl) / 32767.0 * 10.0, 10.0);
+GVL.fMain_Pa_Cyl_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres1A_Cyl) / 32767.0 * 10.0, 10.0);
+GVL.fJib_Pa_Cyl_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres1B_Cyl) / 32767.0 * 10.0, 10.0);
+GVL.fJib_Pb_Cyl_bar := LREAL_TO_REAL((fTempV / 10.0) * G_Parameter.fPresMaxBar);
+
+GVL.fMain_Pb_Cyl_bar := 0.0;
+
+// ── FlowShare live-visning ───────────────────────────────────────────
+GVL.fFlowShare_Scale_pc := LREAL_TO_REAL(G_Signals.fFlowShare_Scale * 100.0);
+
+// ── MICHAEL MOD ─────────────────────────────────────────────────────
+IF GVL.bRun THEN
+    GVL.sImage := 'ImagePool.Michael1';
+ELSE
+    GVL.sImage := 'ImagePool.Michael';
+END_IF
+
+G_Mode.bFlowShare  := GVL.bFlowShare;
+GVL.bFlowShareLamp := G_Mode.bFlowShare;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

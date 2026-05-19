@@ -1,0 +1,299 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6A9D2A2D-DCFE-403C-8E29-E90CC851EF0F}|YT Scope Project1\\YT Scope Project1.tcmproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\YT Scope Project1\\YT Scope Project.tcscopex||{F11FCA8C-C893-4F48-9045-99EE42AF6CA8}|Editor",
+      "RelativeMoniker": "D:0:0:{6A9D2A2D-DCFE-403C-8E29-E90CC851EF0F}|YT Scope Project1\\YT Scope Project1.tcmproj|solutionrelative:YT Scope Project1\\YT Scope Project.tcscopex||{F11FCA8C-C893-4F48-9045-99EE42AF6CA8}|Editor"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\PRG_ScaledInputs.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\PRG_ScaledInputs.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\MAIN.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\MAIN.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\PRG_RampWave.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\PRG_RampWave.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\PRG_Output.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\PRG_Output.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\GVLs\\G_Parameter.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\GVLs\\G_Parameter.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\Visualization Manager.TcVMO@TargetVisu||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\Visualization Manager.TcVMO@TargetVisu||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\Visualization.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\Visualization.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Pressure.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Pressure.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\Visualization Manager.TcVMO||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\Visualization Manager.TcVMO||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Program.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Program.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Mode.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Mode.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Run.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Run.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Start.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Start.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\ImagePool.TcIPO||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\ImagePool.TcIPO||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_ControlFeatures.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_ControlFeatures.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Position.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Position.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Sine.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{5166A57C-758C-414D-A61A-B1F8522A88B0}|RedCraneFeedForwardV2\\FeedForwardSine\\FeedForwardSine.plcproj|solutionrelative:RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Sine.TcVIS||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 8,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3f61aebf-0260-4afc-86d9-ad36d38a7bdc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{94c070b9-db0b-4415-9311-bac4eef266f5}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PRG_RampWave",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\PRG_RampWave.TcPOU",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\PRG_RampWave.TcPOU",
+              "ToolTip": "PRG_RampWave [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-07T08:14:21.944Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PRG_Output",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\PRG_Output.TcPOU",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\PRG_Output.TcPOU",
+              "ToolTip": "PRG_Output [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-07T08:13:24.908Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MAIN",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\MAIN.TcPOU",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\MAIN.TcPOU",
+              "ToolTip": "MAIN [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T13:48:42.505Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PRG_ScaledInputs",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\PRG_ScaledInputs.TcPOU",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\POUs\\PRG_ScaledInputs.TcPOU",
+              "ToolTip": "PRG_ScaledInputs [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T13:45:04.864Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "TargetVisu",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\Visualization Manager.TcVMO@TargetVisu",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\Visualization Manager.TcVMO@TargetVisu",
+              "ToolTip": "TargetVisu [RedCraneFeedForwardV2.FeedForwardSine.Visualization Manager]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T10:52:58.532Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Visualization Manager",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\Visualization Manager.TcVMO",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\Visualization Manager.TcVMO",
+              "ToolTip": "Visualization Manager [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T10:36:47.998Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "YT Scope Project",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\YT Scope Project1\\YT Scope Project.tcscopex",
+              "RelativeDocumentMoniker": "YT Scope Project1\\YT Scope Project.tcscopex",
+              "ToolTip": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\YT Scope Project1\\YT Scope Project.tcscopex",
+              "RelativeToolTip": "YT Scope Project1\\YT Scope Project.tcscopex",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T10:09:44.789Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "VISU_Run",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Run.TcVIS",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Run.TcVIS",
+              "ToolTip": "VISU_Run [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T09:22:52.136Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "VISU_Program",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Program.TcVIS",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Program.TcVIS",
+              "ToolTip": "VISU_Program [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T08:55:15.238Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ImagePool",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\ImagePool.TcIPO",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\ImagePool.TcIPO",
+              "ToolTip": "ImagePool [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T07:33:05.222Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "VISU_ControlFeatures",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_ControlFeatures.TcVIS",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_ControlFeatures.TcVIS",
+              "ToolTip": "VISU_ControlFeatures [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T07:33:00.974Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "VISU_Mode",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Mode.TcVIS",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Mode.TcVIS",
+              "ToolTip": "VISU_Mode [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T07:32:58.758Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "VISU_Position",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Position.TcVIS",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Position.TcVIS",
+              "ToolTip": "VISU_Position [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T07:32:49.37Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "VISU_Pressure",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Pressure.TcVIS",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Pressure.TcVIS",
+              "ToolTip": "VISU_Pressure [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T07:32:03.386Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "G_Parameter",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\GVLs\\G_Parameter.TcGVL",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\GVLs\\G_Parameter.TcGVL",
+              "ToolTip": "G_Parameter [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T07:31:26.414Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Visualization",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\Visualization.TcVIS",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\Visualization.TcVIS",
+              "ToolTip": "Visualization [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T07:25:39.076Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "VISU_Sine",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Sine.TcVIS",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Sine.TcVIS",
+              "ToolTip": "VISU_Sine [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T07:24:17.484Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "VISU_Start",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneFeedForwardV2HMI\\RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Start.TcVIS",
+              "RelativeDocumentMoniker": "RedCraneFeedForwardV2\\FeedForwardSine\\VISUs\\VISU_Start.TcVIS",
+              "ToolTip": "VISU_Start [RedCraneFeedForwardV2.FeedForwardSine]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-06T07:24:15.298Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

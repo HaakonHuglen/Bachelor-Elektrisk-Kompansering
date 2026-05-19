@@ -1,0 +1,118 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneJoystickDual\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6F5972AA-852D-41EB-83DD-FE310B6290AB}|..\\YT Scope Project1\\YT Scope Project1.tcmproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\YT Scope Project1\\YT Scope Project.tcscopex||{F11FCA8C-C893-4F48-9045-99EE42AF6CA8}|Editor"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E8ECDFD2-4A72-42CC-82CB-D99A23E98A4D}|DualCylinder\\DualCylinder.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneJoystickDual\\DualCylinder\\POUs\\MAIN.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{E8ECDFD2-4A72-42CC-82CB-D99A23E98A4D}|DualCylinder\\DualCylinder.plcproj|solutionrelative:DualCylinder\\POUs\\MAIN.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E8ECDFD2-4A72-42CC-82CB-D99A23E98A4D}|DualCylinder\\DualCylinder.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneJoystickDual\\DualCylinder\\GVLs\\G_IO.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{E8ECDFD2-4A72-42CC-82CB-D99A23E98A4D}|DualCylinder\\DualCylinder.plcproj|solutionrelative:DualCylinder\\GVLs\\G_IO.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E8ECDFD2-4A72-42CC-82CB-D99A23E98A4D}|DualCylinder\\DualCylinder.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneJoystickDual\\DualCylinder\\FBs\\FB_JoystickScaling.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{E8ECDFD2-4A72-42CC-82CB-D99A23E98A4D}|DualCylinder\\DualCylinder.plcproj|solutionrelative:DualCylinder\\FBs\\FB_JoystickScaling.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E8ECDFD2-4A72-42CC-82CB-D99A23E98A4D}|DualCylinder\\DualCylinder.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneJoystickDual\\DualCylinder\\FBs\\FB_OutputScaling.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{E8ECDFD2-4A72-42CC-82CB-D99A23E98A4D}|DualCylinder\\DualCylinder.plcproj|solutionrelative:DualCylinder\\FBs\\FB_OutputScaling.TcPOU||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E8ECDFD2-4A72-42CC-82CB-D99A23E98A4D}|DualCylinder\\DualCylinder.plcproj|C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneJoystickDual\\DualCylinder\\GVLs\\G_Signals.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}",
+      "RelativeMoniker": "D:0:0:{E8ECDFD2-4A72-42CC-82CB-D99A23E98A4D}|DualCylinder\\DualCylinder.plcproj|solutionrelative:DualCylinder\\GVLs\\G_Signals.TcGVL||{CFF47BB1-5559-4BDE-A2AF-06B30BC64F6C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3f61aebf-0260-4afc-86d9-ad36d38a7bdc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{94c070b9-db0b-4415-9311-bac4eef266f5}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "YT Scope Project",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\YT Scope Project1\\YT Scope Project.tcscopex",
+              "RelativeDocumentMoniker": "..\\YT Scope Project1\\YT Scope Project.tcscopex",
+              "ToolTip": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\YT Scope Project1\\YT Scope Project.tcscopex",
+              "RelativeToolTip": "..\\YT Scope Project1\\YT Scope Project.tcscopex",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-04-28T10:57:01.353Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FB_JoystickScaling",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneJoystickDual\\DualCylinder\\FBs\\FB_JoystickScaling.TcPOU",
+              "RelativeDocumentMoniker": "DualCylinder\\FBs\\FB_JoystickScaling.TcPOU",
+              "ToolTip": "FB_JoystickScaling [RedCraneJoystickDual.DualCylinder]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-04-13T09:55:59.178Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "G_IO",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneJoystickDual\\DualCylinder\\GVLs\\G_IO.TcGVL",
+              "RelativeDocumentMoniker": "DualCylinder\\GVLs\\G_IO.TcGVL",
+              "ToolTip": "G_IO [RedCraneJoystickDual.DualCylinder]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-04-13T09:51:51.248Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FB_OutputScaling",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneJoystickDual\\DualCylinder\\FBs\\FB_OutputScaling.TcPOU",
+              "RelativeDocumentMoniker": "DualCylinder\\FBs\\FB_OutputScaling.TcPOU",
+              "ToolTip": "FB_OutputScaling [RedCraneJoystickDual.DualCylinder]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-04-13T10:39:28.9Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MAIN",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneJoystickDual\\DualCylinder\\POUs\\MAIN.TcPOU",
+              "RelativeDocumentMoniker": "DualCylinder\\POUs\\MAIN.TcPOU",
+              "ToolTip": "MAIN [RedCraneJoystickDual.DualCylinder]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-04-13T09:51:49.64Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "G_Signals",
+              "DocumentMoniker": "C:\\Users\\Tobno\\Documents\\TcXaeShell\\RedCraneJoystickDual\\DualCylinder\\GVLs\\G_Signals.TcGVL",
+              "RelativeDocumentMoniker": "DualCylinder\\GVLs\\G_Signals.TcGVL",
+              "ToolTip": "G_Signals [RedCraneJoystickDual.DualCylinder]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-04-13T10:39:20.375Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

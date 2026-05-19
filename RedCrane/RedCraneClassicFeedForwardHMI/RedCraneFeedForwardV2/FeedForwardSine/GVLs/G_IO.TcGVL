@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="G_IO" Id="{ca2a3a63-d3ec-4262-a0cc-6c387626607f}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+// INPUTS
+    nRawCylinder1       AT %I* : INT;       // Position sensor jib
+    nRawCylinder2       AT %I* : INT;       // Position sensor main
+    nRawPres1A          AT %I* : INT;       // Jib port A pressure
+    nRawPres1B          AT %I* : INT;       // Jib port B pressure
+    nRawPres2A          AT %I* : INT;       // Main port A pressure
+    nRawPres2B          AT %I* : INT;       // Main port B pressure
+    nRawPresSupply      AT %I* : INT;       // Supply pressure
+    bDMA1_Error         AT %I* : BOOL;
+    bDMA2_Error         AT %I* : BOOL;
+    bRampButton         	   : BOOL;      // Start button
+    bEmergencyStop      AT %I* : BOOL;
+	nRawSpool1          AT %I* : INT;       // DMA1 spool feedback (jib)
+    nRawSpool2          AT %I* : INT;       // DMA2 spool feedback (main)
+	nRawPres2A_Cyl      AT %I* : INT;       // Main port A pressure (cylinder)
+	nRawPres1A_Cyl      AT %I* : INT;       // Jib port A pressure (cylinder)
+	nRawPres1B_Cyl      AT %I* : INT;       // Jib port B pressure (cylinder)
+
+// OUTPUTS
+    nValve1Output       AT %Q* : INT;
+    nValve2Output       AT %Q* : INT;
+    bDMA1_Enable        AT %Q* : BOOL;
+    bDMA2_Enable        AT %Q* : BOOL;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

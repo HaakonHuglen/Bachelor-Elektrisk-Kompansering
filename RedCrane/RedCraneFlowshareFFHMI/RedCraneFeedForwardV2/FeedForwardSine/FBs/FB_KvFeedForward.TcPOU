@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_KvFeedForward" Id="{abfd57d8-f511-4e09-a9d8-1dc6c18337ac}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_KvFeedForward
+VAR_INPUT
+    bEnable     : BOOL;
+    fXDotRef    : LREAL;
+    fPa         : LREAL;
+    fPb         : LREAL;
+    fPs         : LREAL;
+    fA          : LREAL;
+    fAr         : LREAL;
+    
+    fPoly_Up_a5   : LREAL;
+    fPoly_Up_a4   : LREAL;
+    fPoly_Up_a3   : LREAL;
+    fPoly_Up_a2   : LREAL;
+    fPoly_Up_a1   : LREAL;
+    fPoly_Up_a0   : LREAL;
+    fPoly_Down_a5 : LREAL;
+    fPoly_Down_a4 : LREAL;
+    fPoly_Down_a3 : LREAL;
+    fPoly_Down_a2 : LREAL;
+    fPoly_Down_a1 : LREAL;
+    fPoly_Down_a0 : LREAL;
+END_VAR
+VAR_OUTPUT
+    fU_FF   : LREAL;
+END_VAR
+VAR
+    fQ      : LREAL;        // [L/min]
+    fdP     : LREAL;        // [bar]
+    fKv     : LREAL;
+    fdP_min : LREAL := 0.5;
+    fVMin   : LREAL := 0.001;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT bEnable OR ABS(fXDotRef) < fVMin THEN
+    fU_FF := 0.0;
+    fQ    := 0.0;
+    fdP   := 0.0;
+    fKv   := 0.0;
+    RETURN;
+END_IF
+
+IF fXDotRef > 0.0 THEN
+    fQ  := fXDotRef * fA * 60000.0;     // L/min, positive
+    fdP := fPs - fPa;                   // bar
+ELSE
+    fQ  := ABS(fXDotRef) * fAr * 60000.0;
+    fdP := fPs - fPb;
+END_IF
+
+IF fdP < fdP_min THEN
+    fdP := fdP_min;
+END_IF
+
+fKv := fQ / SQRT(fdP);
+
+IF fXDotRef > 0.0 THEN
+    fU_FF := fPoly_Up_a5 * EXPT(fKv, 5)
+           + fPoly_Up_a4 * EXPT(fKv, 4)
+           + fPoly_Up_a3 * EXPT(fKv, 3)
+           + fPoly_Up_a2 * EXPT(fKv, 2)
+           + fPoly_Up_a1 * fKv
+           + fPoly_Up_a0;
+ELSE
+    fU_FF := fPoly_Down_a5 * EXPT(fKv, 5)
+           + fPoly_Down_a4 * EXPT(fKv, 4)
+           + fPoly_Down_a3 * EXPT(fKv, 3)
+           + fPoly_Down_a2 * EXPT(fKv, 2)
+           + fPoly_Down_a1 * fKv
+           + fPoly_Down_a0;
+END_IF
+
+fU_FF := LIMIT(-1.0, fU_FF, 1.0);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

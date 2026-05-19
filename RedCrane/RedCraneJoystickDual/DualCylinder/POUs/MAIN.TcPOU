@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="MAIN" Id="{dd832403-0270-4e53-bfb1-d6767832661f}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	// Main sylinder
+    fbJoystickMain      : FB_JoystickScaling;
+    fbSensorMain        : FB_SensorScaling;
+    fbValveMainOutput   : FB_OutputScaling;
+    bRunMain            : BOOL;
+
+    // Jib sylinder
+    fbJoystickJib       : FB_JoystickScaling;
+    fbSensorJib         : FB_SensorScaling;
+    fbValveJibOutput    : FB_OutputScaling;
+    bRunJib             : BOOL;
+	
+	// ---- SYLINDER JIB LENGDESENSOR ----
+    fCylJib_Vmin    : LREAL := 1.0;
+    fCylJib_Vmax    : LREAL := 7.6;
+    fCylJib_Stroke  : LREAL := 855.0;
+
+    // ---- SYLINDER MAIN LENGDESENSOR ----
+    fCylMain_Vmin   : LREAL := 2.03;
+    fCylMain_Vmax   : LREAL := 7.924;
+    fCylMain_Stroke : LREAL := 743.0;
+
+    // ---- MONITOR LENGDE ----
+    fCylinderJib_mm  : LREAL;
+    fCylinderMain_mm : LREAL;
+    fCylJib_V        : LREAL;
+    fCylMain_V       : LREAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Nødstopp: NC-kontakt, TRUE = OK, FALSE = stopp
+G_Signals.bSystemOk := G_IO.bEmergencyStop;
+
+// Run-betingelser per sylinder
+bRunMain := G_Signals.bSystemOk AND NOT G_IO.bDMAMain_Error;
+bRunJib  := G_Signals.bSystemOk AND NOT G_IO.bDMAJib_Error;
+
+// ===== MAIN SYLINDER (DMA 2) =====
+fbJoystickMain(
+    nRawInput := G_IO.nRawJoystickMain,
+    bEnable   := bRunMain,
+    fOutput   => G_Signals.fJoystickMain
+);
+
+fbSensorMain(
+    nRawInput := G_IO.nRawSensorMain,
+    fOutput_V => G_Signals.fSensorMain_V
+);
+
+G_Signals.fValveMainOutput := G_Signals.fJoystickMain;
+
+fbValveMainOutput(
+    fNormalizedInput := G_Signals.fValveMainOutput,
+    bEnable          := bRunMain,
+    nOutput          => G_IO.nValveMainOutput
+);
+
+G_IO.bDMAMain_Enable := bRunMain;
+
+// ===== JIB SYLINDER (DMA 1) =====
+fbJoystickJib(
+    nRawInput          := G_IO.nRawJoystickJib,
+    bEnable            := bRunJib,
+    fMaxInputValue     := 29130.0,
+    fMinInputValue     := 9930.0,
+    fNeutralInputValue := 19340.0,
+    fOutput            => G_Signals.fJoystickJib
+);
+
+fbSensorJib(
+    nRawInput := G_IO.nRawSensorJib,
+    fOutput_V => G_Signals.fSensorJib_V
+);
+
+G_Signals.fValveJibOutput := G_Signals.fJoystickJib;
+
+fbValveJibOutput(
+    fNormalizedInput := G_Signals.fValveJibOutput,
+    bEnable          := bRunJib,
+    nOutput          => G_IO.nValveJibOutput
+);
+
+G_IO.bDMAJib_Enable := bRunJib;
+
+// ===== SYLINDER LENGDESENSORER =====
+fCylJib_V := INT_TO_LREAL(G_IO.nRawCylinderJib) / 32767.0 * 10.0;
+fCylJib_V := LIMIT(0.0, fCylJib_V, 10.0);
+fCylinderJib_mm := (fCylJib_V - fCylJib_Vmin) / (fCylJib_Vmax - fCylJib_Vmin) * fCylJib_Stroke;
+fCylinderJib_mm := LIMIT(0.0, fCylinderJib_mm, fCylJib_Stroke);
+
+fCylMain_V := INT_TO_LREAL(G_IO.nRawCylinderMain) / 32767.0 * 10.0;
+fCylMain_V := LIMIT(0.0, fCylMain_V, 10.0);
+fCylinderMain_mm := (fCylMain_V - fCylMain_Vmin) / (fCylMain_Vmax - fCylMain_Vmin) * fCylMain_Stroke;
+fCylinderMain_mm := LIMIT(0.0, fCylinderMain_mm, fCylMain_Stroke);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="G_IO" Id="{75221f8f-15b8-4c75-b8cb-c601ecff9308}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+// INNGANGER
+
+    // Joysticks (EL3068)
+    nRawJoystickMain        AT %I* : INT;
+    nRawJoystickJib         AT %I* : INT;
+
+    // Nødstopp (EL306808 - NC: TRUE = OK, FALSE = nødstopp)
+    bEmergencyStop          AT %I* : BOOL;
+
+    // DMA(2) Main - sensorverdi (EL3068 I4)
+    nRawSensorMain          AT %I* : INT;
+    // DMA(2) Main - Error (EL1008 I2)
+    bDMAMain_Error          AT %I* : BOOL;
+
+    // DMA(1) Jib - sensorverdi (EL3068 I3)
+    nRawSensorJib           AT %I* : INT;
+    // DMA(1) Jib - Error (EL1008 I1)
+    bDMAJib_Error           AT %I* : BOOL;
+
+
+// UTGANGER
+
+    // DMA(2) Main - settpunkt (EL4004 O2)
+    nValveMainOutput        AT %Q* : INT;
+    // DMA(2) Main - Enable (EL2008 I2)
+    bDMAMain_Enable         AT %Q* : BOOL;
+
+    // DMA(1) Jib - settpunkt (EL4004 O1)
+    nValveJibOutput         AT %Q* : INT;
+    // DMA(1) Jib - Enable (EL2008 I1)
+    bDMAJib_Enable          AT %Q* : BOOL;
+	
+// Lengdesensorer (EL3068)
+    nRawCylinderMain        AT %I* : INT;
+    nRawCylinderJib         AT %I* : INT;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

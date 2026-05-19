@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="G_Signals" Id="{6ee47b90-c5c2-4a42-a26c-da235ebd28c0}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+    // Active cylinder values (routed in PRG_ScaledInputs)
+    fPa             : LREAL;    // [bar]
+    fPb             : LREAL;    // [bar]
+    fPs             : LREAL;    // [bar]
+    fPistonPosition : LREAL;    // [m]
+    
+    // References (from sine generator)
+    fXRef           : LREAL;    // [m]
+    fXDotRef        : LREAL;    // [m/s]
+    
+    // Control signals
+    fFF             : LREAL;    // FF output [-1, 1]
+    fPID            : LREAL;    // PID output [-1, 1]
+    fU              : LREAL;    // Final command [-1, 1]
+    fError          : LREAL;    // [m]
+	
+	fJib_Spool      : LREAL;    // [-1, 1] jib actual spool position
+    fMain_Spool     : LREAL;    // [-1, 1] main actual spool position
+    fSpool_Active   : LREAL;    // [-1, 1] active cylinder spool
+	
+	fQ_Ref_Lmin    : LREAL;     // [L/min] forespurt flow
+	fDp_bar        : LREAL;     // [bar] aktivt trykkfall
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

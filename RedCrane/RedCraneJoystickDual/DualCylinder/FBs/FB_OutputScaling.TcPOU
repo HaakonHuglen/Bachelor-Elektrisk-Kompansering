@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_OutputScaling" Id="{da27518f-4ea1-4d70-a901-a96b2b3ad47d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_OutputScaling
+VAR_INPUT
+	bEnable             : BOOL;
+    fNormalizedInput    : LREAL;
+END_VAR
+VAR_OUTPUT
+	nOutput             : INT;
+END_VAR
+VAR
+	fOffset     : LREAL := 16384.0;
+    fMaxValue   : LREAL := 32767.0;
+    fMinValue   : LREAL := 0.0;
+    fTempOutput : LREAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF fNormalizedInput > 0.0 THEN
+    fTempOutput := fNormalizedInput * (fMaxValue - fOffset) + fOffset;
+ELSIF fNormalizedInput < 0.0 THEN
+    fTempOutput := fNormalizedInput * (fOffset - fMinValue) + fOffset;
+ELSE
+    fTempOutput := fOffset;
+END_IF
+
+IF NOT bEnable THEN
+    nOutput := LREAL_TO_INT(fOffset);
+ELSE
+    nOutput := LREAL_TO_INT(LIMIT(fMinValue, fTempOutput, fMaxValue));
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

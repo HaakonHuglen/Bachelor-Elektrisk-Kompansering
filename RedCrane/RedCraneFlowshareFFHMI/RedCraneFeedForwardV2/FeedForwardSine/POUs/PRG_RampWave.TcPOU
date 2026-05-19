@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_RampWave" Id="{015f1993-02c3-4328-b6cb-44bdf4b269dc}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_RampWave
+VAR
+    fJib_Time    : LREAL;
+    fJib_U_norm  : LREAL;
+    fJib_X1      : LREAL;
+    fJib_X2      : LREAL;
+    iJib_Phase   : INT := 0;
+    fbJib_Delay  : TON;
+    fbJib_KvFF   : FB_KvFeedForward;
+    fbJib_PosFB  : FB_PositionFeedback;
+
+    fMain_Time   : LREAL;
+    fMain_U_norm : LREAL;
+    fMain_X1     : LREAL;
+    fMain_X2     : LREAL;
+    iMain_Phase  : INT := 0;
+    fbMain_Delay : TON;
+    fbMain_KvFF  : FB_KvFeedForward;
+    fbMain_PosFB : FB_PositionFeedback;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF G_Mode.eTrajectory <> E_Trajectory.Ramp THEN
+    fJib_Time   := 0.0;
+    iJib_Phase  := 0;
+    fMain_Time  := 0.0;
+    iMain_Phase := 0;
+    RETURN;
+END_IF
+
+// ── JIB ─────────────────────────────────────────────────────────────
+fbJib_Delay(IN := G_IO.bRampButton AND G_Mode.bRunning AND G_Mode.bJibActive,
+            PT := T#2S);
+
+IF fbJib_Delay.Q THEN
+    fJib_Time := fJib_Time + G_Parameter.fCycleTime;
+
+    CASE iJib_Phase OF
+        0:
+            fJib_X1 := G_Parameter.fRamp_X1;
+            fJib_X2 := G_Parameter.fRamp_X2;
+            IF fJib_Time >= G_Parameter.fRamp_Duration THEN
+                fJib_Time := 0.0; iJib_Phase := 1;
+            END_IF
+        1:
+            fJib_X1 := G_Parameter.fRamp_X2;
+            fJib_X2 := G_Parameter.fRamp_X2;
+            IF fJib_Time >= G_Parameter.fRamp_HoldTime THEN
+                fJib_Time := 0.0; iJib_Phase := 2;
+            END_IF
+        2:
+            fJib_X1 := G_Parameter.fRamp_X2;
+            fJib_X2 := G_Parameter.fRamp_X1;
+            IF fJib_Time >= G_Parameter.fRamp_Duration THEN
+                fJib_Time := 0.0; iJib_Phase := 3;
+            END_IF
+        3:
+            fJib_X1 := G_Parameter.fRamp_X1;
+            fJib_X2 := G_Parameter.fRamp_X1;
+            IF fJib_Time >= G_Parameter.fRamp_HoldTime THEN
+                fJib_Time := 0.0; iJib_Phase := 0;
+            END_IF
+    END_CASE
+
+    IF iJib_Phase = 0 OR iJib_Phase = 2 THEN
+        fJib_U_norm := LIMIT(0.0, fJib_Time / G_Parameter.fRamp_Duration, 1.0);
+        G_Signals.fJib_XRef :=
+            fJib_X1 + (fJib_X2 - fJib_X1)
+            * (3.0 * fJib_U_norm * fJib_U_norm - 2.0 * fJib_U_norm * fJib_U_norm * fJib_U_norm);
+        G_Signals.fJib_XDotRef :=
+            (fJib_X2 - fJib_X1) * (6.0 * fJib_U_norm - 6.0 * fJib_U_norm * fJib_U_norm)
+            / G_Parameter.fRamp_Duration;
+    ELSE
+        G_Signals.fJib_XRef    := fJib_X1;
+        G_Signals.fJib_XDotRef := 0.0;
+    END_IF
+
+    fbJib_KvFF(
+        bEnable       := G_Mode.bEnableFF,
+        fXDotRef      := G_Signals.fJib_XDotRef,
+        fPa           := G_Signals.fJib_Pa,
+        fPb           := G_Signals.fJib_Pb,
+        fPs           := G_Signals.fPs,
+        fA            := G_Parameter.fJib_AreaA,
+        fAr           := G_Parameter.fJib_AreaB,
+        fPoly_Up_a5   := G_Parameter.fJib_Up_a5,
+        fPoly_Up_a4   := G_Parameter.fJib_Up_a4,
+        fPoly_Up_a3   := G_Parameter.fJib_Up_a3,
+        fPoly_Up_a2   := G_Parameter.fJib_Up_a2,
+        fPoly_Up_a1   := G_Parameter.fJib_Up_a1,
+        fPoly_Up_a0   := G_Parameter.fJib_Up_a0,
+        fPoly_Down_a5 := G_Parameter.fJib_Down_a5,
+        fPoly_Down_a4 := G_Parameter.fJib_Down_a4,
+        fPoly_Down_a3 := G_Parameter.fJib_Down_a3,
+        fPoly_Down_a2 := G_Parameter.fJib_Down_a2,
+        fPoly_Down_a1 := G_Parameter.fJib_Down_a1,
+        fPoly_Down_a0 := G_Parameter.fJib_Down_a0,
+        fU_FF         => G_Signals.fJib_FF
+    );
+    fbJib_PosFB(
+        bEnable    := G_Mode.bEnablePID,
+        fXRef      := G_Signals.fJib_XRef,
+        fXActual   := G_Signals.fJib_PistonPos,
+        fKp        := G_Parameter.fJib_Kp,
+        fKi        := G_Parameter.fJib_Ki,
+        fKd        := G_Parameter.fJib_Kd,
+        fCycleTime := G_Parameter.fCycleTime,
+        fU_PID     => G_Signals.fJib_PID,
+        fError     => G_Signals.fJib_Error
+    );
+    G_Signals.fJib_U := LIMIT(-1.0, G_Signals.fJib_FF + G_Signals.fJib_PID, 1.0);
+ELSE
+    fJib_Time  := 0.0;
+    iJib_Phase := 0;
+END_IF
+
+// ── MAIN ─────────────────────────────────────────────────────────────
+fbMain_Delay(IN := G_IO.bRampButton AND G_Mode.bRunning AND G_Mode.bMainActive,
+             PT := T#2S);
+
+IF fbMain_Delay.Q THEN
+    fMain_Time := fMain_Time + G_Parameter.fCycleTime;
+
+    CASE iMain_Phase OF
+        0:
+            fMain_X1 := G_Parameter.fRamp_X1;
+            fMain_X2 := G_Parameter.fRamp_X2;
+            IF fMain_Time >= G_Parameter.fRamp_Duration THEN
+                fMain_Time := 0.0; iMain_Phase := 1;
+            END_IF
+        1:
+            fMain_X1 := G_Parameter.fRamp_X2;
+            fMain_X2 := G_Parameter.fRamp_X2;
+            IF fMain_Time >= G_Parameter.fRamp_HoldTime THEN
+                fMain_Time := 0.0; iMain_Phase := 2;
+            END_IF
+        2:
+            fMain_X1 := G_Parameter.fRamp_X2;
+            fMain_X2 := G_Parameter.fRamp_X1;
+            IF fMain_Time >= G_Parameter.fRamp_Duration THEN
+                fMain_Time := 0.0; iMain_Phase := 3;
+            END_IF
+        3:
+            fMain_X1 := G_Parameter.fRamp_X1;
+            fMain_X2 := G_Parameter.fRamp_X1;
+            IF fMain_Time >= G_Parameter.fRamp_HoldTime THEN
+                fMain_Time := 0.0; iMain_Phase := 0;
+            END_IF
+    END_CASE
+
+    IF iMain_Phase = 0 OR iMain_Phase = 2 THEN
+        fMain_U_norm := LIMIT(0.0, fMain_Time / G_Parameter.fRamp_Duration, 1.0);
+        G_Signals.fMain_XRef :=
+            fMain_X1 + (fMain_X2 - fMain_X1)
+            * (3.0 * fMain_U_norm * fMain_U_norm - 2.0 * fMain_U_norm * fMain_U_norm * fMain_U_norm);
+        G_Signals.fMain_XDotRef :=
+            (fMain_X2 - fMain_X1) * (6.0 * fMain_U_norm - 6.0 * fMain_U_norm * fMain_U_norm)
+            / G_Parameter.fRamp_Duration;
+    ELSE
+        G_Signals.fMain_XRef    := fMain_X1;
+        G_Signals.fMain_XDotRef := 0.0;
+    END_IF
+
+    fbMain_KvFF(
+        bEnable       := G_Mode.bEnableFF,
+        fXDotRef      := G_Signals.fMain_XDotRef,
+        fPa           := G_Signals.fMain_Pa,
+        fPb           := G_Signals.fMain_Pb,
+        fPs           := G_Signals.fPs,
+        fA            := G_Parameter.fMain_AreaA,
+        fAr           := G_Parameter.fMain_AreaB,
+        fPoly_Up_a5   := G_Parameter.fMain_Up_a5,
+        fPoly_Up_a4   := G_Parameter.fMain_Up_a4,
+        fPoly_Up_a3   := G_Parameter.fMain_Up_a3,
+        fPoly_Up_a2   := G_Parameter.fMain_Up_a2,
+        fPoly_Up_a1   := G_Parameter.fMain_Up_a1,
+        fPoly_Up_a0   := G_Parameter.fMain_Up_a0,
+        fPoly_Down_a5 := G_Parameter.fMain_Down_a5,
+        fPoly_Down_a4 := G_Parameter.fMain_Down_a4,
+        fPoly_Down_a3 := G_Parameter.fMain_Down_a3,
+        fPoly_Down_a2 := G_Parameter.fMain_Down_a2,
+        fPoly_Down_a1 := G_Parameter.fMain_Down_a1,
+        fPoly_Down_a0 := G_Parameter.fMain_Down_a0,
+        fU_FF         => G_Signals.fMain_FF
+    );
+    fbMain_PosFB(
+        bEnable    := G_Mode.bEnablePID,
+        fXRef      := G_Signals.fMain_XRef,
+        fXActual   := G_Signals.fMain_PistonPos,
+        fKp        := G_Parameter.fMain_Kp,
+        fKi        := G_Parameter.fMain_Ki,
+        fKd        := G_Parameter.fMain_Kd,
+        fCycleTime := G_Parameter.fCycleTime,
+        fU_PID     => G_Signals.fMain_PID,
+        fError     => G_Signals.fMain_Error
+    );
+    G_Signals.fMain_U := LIMIT(-1.0, G_Signals.fMain_FF + G_Signals.fMain_PID, 1.0);
+ELSE
+    fMain_Time  := 0.0;
+    iMain_Phase := 0;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

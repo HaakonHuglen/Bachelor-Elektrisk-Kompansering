@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PRG_ScaledInputs" Id="{5a2279f1-c959-4973-8331-296a68546b40}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM PRG_ScaledInputs
+VAR
+    fSpool1_V           : LREAL;
+    fSpool2_V           : LREAL;
+    fJibV               : LREAL;
+    fMainV              : LREAL;
+    fTempV              : LREAL;
+    fJib_X              : LREAL;
+    fMain_X             : LREAL;
+    fStrokeTwincat_mm   : LREAL;
+    fStrokeCorrected_mm : LREAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Spool feedback
+fSpool1_V := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawSpool1) / 32767.0 * 10.0, 10.0);
+G_Signals.fJib_Spool := LIMIT(-1.0, (fSpool1_V - 5.0) / 5.0, 1.0);
+
+fSpool2_V := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawSpool2) / 32767.0 * 10.0, 10.0);
+G_Signals.fMain_Spool := LIMIT(-1.0, (fSpool2_V - 5.0) / 5.0, 1.0);
+
+// Jib sylindersensor
+fJibV  := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawCylinder1) / 32767.0 * 10.0, 10.0);
+fJib_X := (fJibV - G_Parameter.fJib_Vmin)
+          / (G_Parameter.fJib_Vmax - G_Parameter.fJib_Vmin)
+          * G_Parameter.fJib_Stroke;
+fJib_X := LIMIT(0.0, fJib_X, G_Parameter.fJib_Stroke);
+
+// Kalibrering Jib
+fStrokeTwincat_mm   := fJib_X * 1000.0;
+fStrokeCorrected_mm :=
+      -2.6766141745E-05 * EXPT(fStrokeTwincat_mm, 2)
+    +  9.9764623655E-01 * fStrokeTwincat_mm
+    +  1.8743836626E+01;
+G_Signals.fJib_PistonPos :=
+    LIMIT(0.0, fStrokeCorrected_mm / 1000.0, G_Parameter.fJib_Stroke);
+
+// Main sylindersensor
+fMainV  := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawCylinder2) / 32767.0 * 10.0, 10.0);
+fMain_X := (fMainV - G_Parameter.fMain_Vmin)
+           / (G_Parameter.fMain_Vmax - G_Parameter.fMain_Vmin)
+           * G_Parameter.fMain_Stroke;
+G_Signals.fMain_PistonPos := LIMIT(0.0, fMain_X, G_Parameter.fMain_Stroke);
+
+// Trykk – Jib
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres1A) / 32767.0 * 10.0, 10.0);
+G_Signals.fJib_Pa := (fTempV / 10.0) * G_Parameter.fPresMaxBar;
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres1B) / 32767.0 * 10.0, 10.0);
+G_Signals.fJib_Pb := (fTempV / 10.0) * G_Parameter.fPresMaxBar;
+
+// Trykk – Main
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres2A) / 32767.0 * 10.0, 10.0);
+G_Signals.fMain_Pa := (fTempV / 10.0) * G_Parameter.fPresMaxBar;
+
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPres2B) / 32767.0 * 10.0, 10.0);
+G_Signals.fMain_Pb := (fTempV / 10.0) * G_Parameter.fPresMaxBar;
+
+// Supply-trykk
+fTempV := LIMIT(0.0, INT_TO_LREAL(G_IO.nRawPresSupply) / 32767.0 * 10.0, 10.0);
+G_Signals.fPs := (fTempV / 10.0) * G_Parameter.fPresMaxBar;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

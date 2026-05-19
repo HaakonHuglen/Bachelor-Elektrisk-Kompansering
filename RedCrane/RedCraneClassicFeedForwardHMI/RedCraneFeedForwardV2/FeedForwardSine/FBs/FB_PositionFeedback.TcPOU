@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_PositionFeedback" Id="{98127579-9623-4e58-8890-5e6040d700b1}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_PositionFeedback
+VAR_INPUT
+    bEnable         : BOOL;
+    fXRef           : LREAL;
+    fXActual        : LREAL;
+    fKp             : LREAL;
+    fKi             : LREAL;
+    fKd             : LREAL;
+    fCycleTime      : LREAL;
+END_VAR
+VAR_OUTPUT
+    fU_PID          : LREAL;
+    fError          : LREAL;
+END_VAR
+VAR
+    fErrorPrev      : LREAL;
+    fErrorSum       : LREAL;
+    fTempP, fTempI, fTempD : LREAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT bEnable THEN
+    fU_PID    := 0.0;
+    fError    := 0.0;
+    fErrorSum := 0.0;
+    fErrorPrev := 0.0;
+    RETURN;
+END_IF
+
+fError := fXRef - fXActual;
+fErrorSum := fErrorSum + fError * fCycleTime;
+fErrorSum := LIMIT(-1.0, fErrorSum, 1.0);
+
+fTempP := fKp * fError;
+fTempI := fKi * fErrorSum;
+fTempD := fKd * (fError - fErrorPrev) / fCycleTime;
+
+fErrorPrev := fError;
+
+fU_PID := LIMIT(-1.0, fTempP + fTempI + fTempD, 1.0);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
